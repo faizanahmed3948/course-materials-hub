@@ -1,0 +1,2685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Materials Hub — Eng. Ahmed</title>
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0a0a12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Course Hub">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ========================
+     DARK MODE (default)
+  ======================== */
+  :root {
+    --bg: #0a0a12;
+    --surface: #111120;
+    --card: #161628;
+    --card-hover: #1c1c38;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0efff;
+    --muted: #7a78a0;
+    --accent1: #6c63ff;
+    --accent2: #38bdf8;
+    --accent3: #fb7185;
+    --accent4: #34d399;
+    --accent5: #fbbf24;
+    --accent6: #a78bfa;
+    --input-bg: #111120;
+    --stars: block;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --comment-bg: #1a1a30;
+    --comment-border: rgba(108,99,255,0.2);
+  }
+
+  /* ========================
+     LIGHT MODE
+  ======================== */
+  [data-theme="light"] {
+    --bg: #f5f4ff;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --card-hover: #f0effe;
+    --border: rgba(0,0,0,0.08);
+    --border-hover: rgba(108,99,255,0.35);
+    --text: #18172e;
+    --muted: #6b6890;
+    --input-bg: #f8f7ff;
+    --shadow: 0 4px 20px rgba(108,99,255,0.1);
+    --comment-bg: #f0effe;
+    --comment-border: rgba(108,99,255,0.18);
+  }
+
+  [data-theme="light"] body::before { display: none; }
+  [data-theme="light"] body::after  { display: none; }
+
+  [data-theme="light"] .top-bar {
+    background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent4));
+  }
+
+  [data-theme="light"] .badge-advanced { background: rgba(108,99,255,0.1); }
+  [data-theme="light"] .badge-core     { background: rgba(56,189,248,0.1); }
+  [data-theme="light"] .badge-lab      { background: rgba(52,211,153,0.1); }
+  [data-theme="light"] .badge-math     { background: rgba(251,191,36,0.1); }
+  [data-theme="light"] .badge-general  { background: rgba(251,113,133,0.1); }
+  [data-theme="light"] .badge-video    { background: rgba(251,113,133,0.1); }
+
+  [data-theme="light"] .arrow-icon { background: rgba(0,0,0,0.04); }
+  [data-theme="light"] .tab-btn { background: #efefff; }
+  [data-theme="light"] .tab-btn .tab-count { background: rgba(0,0,0,0.07); }
+  [data-theme="light"] .video-banner-inner {
+    background: linear-gradient(135deg, rgba(251,113,133,0.05), rgba(167,139,250,0.05));
+  }
+  [data-theme="light"] .section-divider { border-color: rgba(0,0,0,0.08); }
+  [data-theme="light"] footer { border-color: rgba(0,0,0,0.08); }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 90%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(2px 2px at 40% 20%, rgba(108,99,255,0.4) 0%, transparent 100%),
+      radial-gradient(2px 2px at 90% 50%, rgba(56,189,248,0.3) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(108,99,255,0.08) 0%, transparent 70%);
+    top: -200px; left: -200px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap { position: relative; z-index: 1; }
+
+  /* ========================
+     THEME TOGGLE BUTTON
+  ======================== */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hover);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--shadow);
+    transition: all 0.25s ease;
+  }
+  .theme-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    border-color: var(--accent1);
+  }
+  .theme-toggle .icon-dark { display: block; }
+  .theme-toggle .icon-light { display: none; }
+  [data-theme="light"] .theme-toggle .icon-dark { display: none; }
+  [data-theme="light"] .theme-toggle .icon-light { display: block; }
+
+  /* ========================
+     HEADER
+  ======================== */
+  header {
+    text-align: center;
+    padding: 64px 24px 40px;
+  }
+
+  .blessing {
+    font-size: 14px;
+    color: var(--accent4);
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 7vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    background: linear-gradient(135deg, #fff 0%, #c4c0ff 50%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+
+  [data-theme="light"] header h1 {
+    background: linear-gradient(135deg, #3730a3 0%, #6c63ff 50%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p { color: var(--muted); font-size: 17px; font-weight: 300; letter-spacing: 0.01em; }
+
+  /* ========================
+     SEARCH + FILTER BAR
+  ======================== */
+  .controls {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap { flex: 1; min-width: 220px; position: relative; }
+  .search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  .search-wrap input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px 12px 42px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-wrap input:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px rgba(108,99,255,0.15); }
+
+  .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pill:hover { border-color: var(--border-hover); color: var(--text); }
+  .pill.active { background: var(--accent1); border-color: var(--accent1); color: #fff; }
+
+  /* ========================
+     STATS BAR
+  ======================== */
+  .stats { display: flex; justify-content: center; gap: 32px; padding: 0 24px 40px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  /* ========================
+     GRID + CARDS
+  ======================== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease both;
+    box-shadow: var(--shadow);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .card:hover { border-color: var(--border-hover); transform: translateY(-6px) scale(1.01); background: var(--card-hover); }
+  .card:hover::before { opacity: 1; }
+  .card:active { transform: translateY(-3px) scale(1.005); }
+
+  .card[data-cat="advanced"]::before { background: radial-gradient(circle at top left, rgba(108,99,255,0.08), transparent 60%); }
+  .card[data-cat="core"]::before     { background: radial-gradient(circle at top left, rgba(56,189,248,0.08), transparent 60%); }
+  .card[data-cat="lab"]::before      { background: radial-gradient(circle at top left, rgba(52,211,153,0.08), transparent 60%); }
+  .card[data-cat="math"]::before     { background: radial-gradient(circle at top left, rgba(251,191,36,0.08), transparent 60%); }
+  .card[data-cat="general"]::before  { background: radial-gradient(circle at top left, rgba(251,113,133,0.08), transparent 60%); }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+
+  .emoji-wrap {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .card:hover .emoji-wrap { transform: scale(1.2) rotate(-5deg); }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-advanced { background: rgba(108,99,255,0.15); color: #a5a0ff; border: 1px solid rgba(108,99,255,0.25); }
+  .badge-core     { background: rgba(56,189,248,0.15);  color: #7dd3fc; border: 1px solid rgba(56,189,248,0.25); }
+  .badge-lab      { background: rgba(52,211,153,0.15);  color: #6ee7b7; border: 1px solid rgba(52,211,153,0.25); }
+  .badge-math     { background: rgba(251,191,36,0.15);  color: #fcd34d; border: 1px solid rgba(251,191,36,0.25); }
+  .badge-general  { background: rgba(251,113,133,0.15); color: #fda4af; border: 1px solid rgba(251,113,133,0.25); }
+
+  .card h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--text); }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border);
+  }
+  .open-label { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .arrow-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--muted);
+  }
+  .card:hover .arrow-icon { background: var(--accent1); border-color: var(--accent1); color: white; transform: translate(2px, -2px); }
+
+  /* ========================
+     EMPTY STATE
+  ======================== */
+  .empty { text-align: center; padding: 60px 24px; display: none; grid-column: 1 / -1; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty h3 { font-family: 'Syne', sans-serif; font-size: 20px; margin-bottom: 8px; }
+  .empty p { color: var(--muted); font-size: 15px; }
+
+  /* ========================
+     TAB SWITCHER
+  ======================== */
+  .tab-nav { display: flex; justify-content: center; gap: 8px; padding: 0 24px 36px; flex-wrap: wrap; }
+  .tab-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 24px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    letter-spacing: 0.01em;
+  }
+  .tab-btn:hover { border-color: var(--border-hover); color: var(--text); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, rgba(108,99,255,0.25), rgba(56,189,248,0.15));
+    border-color: rgba(108,99,255,0.45);
+    color: var(--text);
+    box-shadow: 0 0 0 1px rgba(108,99,255,0.2), 0 4px 20px rgba(108,99,255,0.12);
+  }
+  .tab-btn .tab-icon { font-size: 17px; line-height: 1; }
+  .tab-btn .tab-count {
+    font-size: 11px; font-weight: 500;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    padding: 2px 8px;
+    color: var(--muted);
+  }
+  .tab-btn.active .tab-count { background: rgba(108,99,255,0.25); color: #c4c0ff; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ========================
+     VIDEO SECTION
+  ======================== */
+  .video-banner { max-width: 1100px; margin: 0 auto 28px; padding: 0 24px; }
+  .video-banner-inner {
+    display: flex; align-items: center; gap: 16px;
+    background: linear-gradient(135deg, rgba(251,113,133,0.07), rgba(167,139,250,0.07));
+    border: 1px solid rgba(251,113,133,0.18);
+    border-radius: 18px;
+    padding: 20px 24px;
+  }
+  .video-banner-emoji { font-size: 40px; flex-shrink: 0; }
+  .video-banner-text h2 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .video-banner-text p { font-size: 13px; color: var(--muted); }
+  .badge-video { background: rgba(251,113,133,0.15); color: #fda4af; border: 1px solid rgba(251,113,133,0.3); }
+  .video-card[data-cat="video"]::before { background: radial-gradient(circle at top left, rgba(251,113,133,0.1), transparent 60%); }
+  .video-card:hover .arrow-icon { background: #fb7185 !important; border-color: #fb7185 !important; }
+  .play-dot {
+    display: inline-block; width: 7px; height: 7px;
+    border-radius: 50%; background: #fb7185; margin-right: 5px;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.75); } }
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px; max-width: 1100px; margin: 0 auto; padding: 0 24px 80px;
+  }
+
+  /* ========================
+     SECTION DIVIDER
+  ======================== */
+  .section-divider {
+    max-width: 1100px; margin: 0 auto 48px; padding: 0 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ========================
+     CONTACT SECTION
+  ======================== */
+  .contact-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .section-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .section-header p { color: var(--muted); font-size: 15px; }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+  .contact-link:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    background: var(--card-hover);
+  }
+  .contact-link .cl-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .cl-icon.li { background: rgba(10,102,194,0.15); }
+  .cl-icon.gh { background: rgba(255,255,255,0.07); }
+  .cl-icon.ig { background: rgba(225,48,108,0.13); }
+  .cl-icon.wa { background: rgba(37,211,102,0.13); }
+  .cl-icon.em { background: rgba(108,99,255,0.15); }
+  .cl-icon.tw { background: rgba(29,161,242,0.13); }
+  .contact-link .cl-label { font-size: 11px; color: var(--muted); }
+  .contact-link .cl-text { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; }
+
+  /* Message form */
+  .msg-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+  .msg-form h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .msg-form .form-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  @media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
+  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .form-field label { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  .form-field select option { background: var(--surface); color: var(--text); }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px rgba(108,99,255,0.15); }
+  .form-field textarea { resize: vertical; min-height: 110px; }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: var(--muted); }
+
+  .send-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 13px 28px;
+    background: var(--accent1);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  .send-btn:hover { background: #5a52e0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(108,99,255,0.35); }
+  .send-btn:active { transform: translateY(0); }
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 28px;
+    color: var(--accent4);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .form-success .ok-emoji { font-size: 40px; display: block; margin-bottom: 10px; }
+
+  /* ========================
+     COMMUNITY COMMENTS WALL
+  ======================== */
+  .comments-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .comments-submit {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow);
+  }
+  .comments-submit h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .comment-input-row { display: flex; gap: 10px; align-items: flex-start; }
+  .comment-input-row textarea {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    min-height: 70px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .comment-input-row textarea:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px rgba(108,99,255,0.12); }
+  .comment-input-row textarea::placeholder { color: var(--muted); }
+  .comment-name-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .comment-name-row input {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .comment-name-row input::placeholder { color: var(--muted); }
+  .comment-name-row input:focus { border-color: var(--accent1); }
+  .post-btn {
+    padding: 10px 22px;
+    background: var(--accent1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    align-self: flex-end;
+  }
+  .post-btn:hover { background: #5a52e0; transform: translateY(-1px); }
+
+  .comments-wall { display: flex; flex-direction: column; gap: 14px; }
+  .comment-card {
+    background: var(--comment-bg);
+    border: 1px solid var(--comment-border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    animation: fadeInUp 0.35s ease both;
+    position: relative;
+  }
+  .comment-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .comment-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .comment-meta { flex: 1; }
+  .comment-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+  .comment-date { font-size: 11px; color: var(--muted); }
+  .comment-text { font-size: 14px; color: var(--text); line-height: 1.6; }
+  .comment-hearts {
+    position: absolute;
+    top: 14px; right: 16px;
+    display: flex; align-items: center; gap: 4px;
+    font-size: 12px; color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+  }
+  .comment-hearts:hover { color: #fb7185; }
+  .comment-hearts.liked { color: #fb7185; }
+  .heart-count { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; }
+  .no-comments {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .no-comments .no-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+
+  /* ========================
+     DECORATIONS + MISC
+  ======================== */
+  .divider { width: 60px; height: 3px; border-radius: 999px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); margin: 18px auto 0; }
+  .top-bar { height: 3px; background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent4)); width: 100%; }
+
+  .bg-purple { background: rgba(108,99,255,0.15); }
+  .bg-blue   { background: rgba(56,189,248,0.15); }
+  .bg-green  { background: rgba(52,211,153,0.15); }
+  .bg-amber  { background: rgba(251,191,36,0.15); }
+  .bg-pink   { background: rgba(251,113,133,0.15); }
+  .bg-coral  { background: rgba(167,139,250,0.15); }
+
+  .card.hidden { display: none; }
+  .count-indicator { display: inline-block; font-size: 12px; color: var(--muted); margin-left: 8px; }
+
+  /* ========================
+     FOOTER
+  ======================== */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    position: relative; z-index: 1;
+  }
+  footer span { color: var(--accent4); }
+
+  /* ========================
+     ANIMATIONS
+  ======================== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(1)  { animation-delay: 0.03s; }
+  .card:nth-child(2)  { animation-delay: 0.06s; }
+  .card:nth-child(3)  { animation-delay: 0.09s; }
+  .card:nth-child(4)  { animation-delay: 0.12s; }
+  .card:nth-child(5)  { animation-delay: 0.15s; }
+  .card:nth-child(6)  { animation-delay: 0.18s; }
+  .card:nth-child(7)  { animation-delay: 0.21s; }
+  .card:nth-child(8)  { animation-delay: 0.24s; }
+  .card:nth-child(9)  { animation-delay: 0.27s; }
+  .card:nth-child(10) { animation-delay: 0.30s; }
+  .card:nth-child(11) { animation-delay: 0.33s; }
+  .card:nth-child(12) { animation-delay: 0.36s; }
+
+  @media (max-width: 600px) {
+    header { padding: 40px 16px 28px; }
+    .grid, .video-grid { gap: 12px; padding: 0 16px 60px; }
+    .controls { padding: 0 16px; }
+    .video-banner-inner { flex-direction: column; text-align: center; }
+    .tab-btn { padding: 10px 18px; font-size: 13px; }
+    .contact-section, .comments-section { padding: 0 16px 60px; }
+    .theme-toggle { top: 12px; right: 12px; width: 42px; height: 42px; }
+  }
+
+  /* Scroll to top */
+  .scroll-top {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--accent1);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 16px rgba(108,99,255,0.4);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 998;
+  }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); }
+  .scroll-top:hover { transform: translateY(-2px); }
+
+  /* PWA Install Banner */
+  .install-banner {
+    position: fixed;
+    left: 16px; right: 16px; bottom: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+    z-index: 999;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .install-banner-inner {
+    background: var(--card);
+    border: 1px solid var(--border-hover);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .install-icon { font-size: 24px; flex-shrink: 0; }
+  .install-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .install-text strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .install-text span {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .install-btn {
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .install-btn:hover { transform: translateY(-1px); }
+  .install-dismiss {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 4px;
+  }
+  .install-dismiss:hover { color: var(--text); }
+  @media (max-width: 480px) {
+    .install-banner { left: 10px; right: 10px; bottom: 10px; }
+    .install-banner-inner { padding: 12px; gap: 10px; }
+    .install-text strong { font-size: 13px; }
+    .install-text span { font-size: 11px; }
+  }
+
+  /* ========================
+     TUTORING SECTION
+  ======================== */
+  .tutoring-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .tutor-price-badge {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(52,211,153,0.12), rgba(56,189,248,0.08));
+    border: 1px solid rgba(52,211,153,0.28);
+    border-radius: 18px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .tutor-price-icon { font-size: 36px; flex-shrink: 0; }
+  .tutor-price-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent4);
+  }
+  .tutor-price-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .wa-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px 28px;
+    background: #25D366;
+    color: #fff;
+    border-radius: 16px;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-bottom: 36px;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.3);
+    transition: all 0.22s ease;
+  }
+  .wa-cta-btn:hover {
+    background: #1ebe5c;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(37,211,102,0.4);
+  }
+  .wa-cta-btn:active { transform: translateY(0); }
+
+  .tutor-qr-wrap {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 44px;
+    flex-wrap: wrap;
+  }
+  .tutor-qr-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .tutor-qr-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.04em;
+  }
+  .tutor-qr-info { flex: 1; min-width: 220px; }
+  .tutor-qr-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .tutor-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .tutor-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .tutor-steps li span {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--accent1);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .tutor-steps li em { color: var(--muted); font-style: normal; }
+
+  .tutor-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 22px;
+  }
+
+  .tutor-courses-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .tutor-courses-header h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .tutor-courses-header p { color: var(--muted); font-size: 14px; }
+
+  .tutor-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .tutor-course-card {
+    border-radius: 16px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: var(--shadow);
+  }
+  .tutor-course-card:hover { transform: translateY(-4px); }
+  .tc-purple { border-color: rgba(108,99,255,0.3); }
+  .tc-purple:hover { border-color: rgba(108,99,255,0.6); }
+  .tc-blue   { border-color: rgba(56,189,248,0.3); }
+  .tc-blue:hover { border-color: rgba(56,189,248,0.6); }
+  .tc-amber  { border-color: rgba(251,191,36,0.3); }
+  .tc-amber:hover { border-color: rgba(251,191,36,0.6); }
+  .tc-coral  { border-color: rgba(167,139,250,0.3); }
+  .tc-coral:hover { border-color: rgba(167,139,250,0.6); }
+  .tc-blue2  { border-color: rgba(56,189,248,0.3); }
+  .tc-blue2:hover { border-color: rgba(56,189,248,0.6); }
+  .tc-green  { border-color: rgba(52,211,153,0.3); }
+  .tc-green:hover { border-color: rgba(52,211,153,0.6); }
+  .tc-icon { font-size: 26px; }
+  .tc-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+  }
+  .tc-code {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  @media (max-width: 600px) {
+    .tutor-qr-wrap { flex-direction: column; align-items: center; }
+    .tutor-courses-grid { grid-template-columns: 1fr 1fr; }
+    .wa-cta-btn { font-size: 15px; }
+  }
+
+  /* ══════════════════════════════════════════════════
+     STUDY PLAN TAB STYLES
+  ══════════════════════════════════════════════════ */
+  #panel-studyplan { padding-bottom: 60px; }
+
+  /* ID Entry */
+  .sp-id-entry {
+    max-width: 500px; margin: 0 auto 32px; padding: 36px 32px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 24px; text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  }
+  .sp-id-entry .sp-logo { font-size: 44px; display: block; margin-bottom: 12px; }
+  .sp-id-entry h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .sp-id-entry p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 22px; }
+  .sp-id-wrap { position: relative; margin-bottom: 14px; }
+  .sp-prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 800; color: var(--accent1); font-family: 'Syne', sans-serif; pointer-events: none; }
+  .sp-id-input { width: 100%; padding: 13px 14px 13px 36px; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: .08em; background: var(--bg); border: 1.5px solid var(--border); border-radius: 13px; color: var(--text); outline: none; transition: border-color .2s, box-shadow .2s; }
+  .sp-id-input::placeholder { font-size: 13px; font-weight: 400; letter-spacing: 0; font-family: 'DM Sans', sans-serif; color: var(--muted); }
+  .sp-id-input:focus { border-color: var(--accent1); box-shadow: 0 0 0 4px rgba(108,99,255,.13); }
+  .sp-id-input.err { border-color: #f43f5e; animation: sp-shake .35s ease; }
+  @keyframes sp-shake { 0%,100%{transform:translateX(0)} 30%{transform:translateX(-6px)} 70%{transform:translateX(6px)} }
+  .sp-err-msg { font-size: 11.5px; color: #f43f5e; min-height: 16px; margin-bottom: 10px; }
+  .sp-plan-picker { display: flex; gap: 8px; margin-bottom: 16px; }
+  .sp-plan-opt { flex: 1; padding: 12px 8px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; text-align: center; }
+  .sp-plan-opt:hover { border-color: var(--border-hover); color: var(--text); }
+  .sp-plan-opt.sel { border-color: var(--accent1); background: rgba(108,99,255,.14); color: var(--accent1); }
+  .sp-plan-opt .po-title { font-size: 14px; font-weight: 800; font-family: 'Syne', sans-serif; display: block; margin-bottom: 2px; }
+  .sp-plan-opt .po-new { display: inline-block; font-size: 9px; font-weight: 700; background: rgba(244,63,94,.15); color: #f43f5e; border-radius: 999px; padding: 1px 7px; margin-top: 3px; }
+  .sp-start-btn { width: 100%; padding: 14px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; border: none; border-radius: 13px; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+  .sp-start-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(108,99,255,.35); }
+  .sp-privacy { font-size: 11px; color: var(--muted); margin-top: 14px; }
+
+  /* Student bar inside study plan */
+  .sp-bar {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 12px 18px; margin-bottom: 22px;
+  }
+  .sp-bar-left { display: flex; align-items: center; gap: 10px; }
+  .sp-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--accent1), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; font-family: 'Syne', sans-serif; flex-shrink: 0; }
+  .sp-bar-id { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: .05em; }
+  .sp-bar-plan { font-size: 11px; color: var(--muted); }
+  .sp-sync-status { font-size: 11px; margin-top: 2px; display: none; }
+  .sp-sync-status.saving { display: block; color: var(--muted); }
+  .sp-sync-status.saved  { display: block; color: #34d399; }
+  .sp-sync-status.error  { display: block; color: #f43f5e; font-weight: 600; }
+  .sp-bar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .sp-bar-btn { font-size: 11.5px; font-weight: 600; font-family: 'Outfit', sans-serif; padding: 6px 13px; border-radius: 9px; border: 1px solid var(--border); background: none; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .sp-bar-btn:hover { color: var(--text); border-color: var(--border-hover); }
+  .sp-bar-btn.primary { background: linear-gradient(135deg, var(--accent1), var(--accent2)); border: none; color: #fff; }
+  .sp-bar-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(108,99,255,.35); }
+  .sp-bar-btn.danger:hover { color: #f43f5e; border-color: rgba(244,63,94,.4); }
+
+  /* Stats */
+  .sp-stats { display: grid; grid-template-columns: repeat(3,1fr) auto; gap: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px 18px; margin-bottom: 20px; align-items: center; }
+  .sp-stat { padding: 0 14px; border-right: 1px solid var(--border); }
+  .sp-stat:first-child { padding-left: 0; }
+  .sp-stat:nth-child(3) { border-right: none; }
+  .sp-stat-v { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
+  .sp-stat-v .sp-sub { font-size: 11px; color: var(--muted); font-family: 'Outfit', sans-serif; font-weight: 400; }
+  .sp-stat-l { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+  .sp-pbar-wrap { padding-left: 14px; }
+  .sp-pbar { width: 100px; height: 7px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 5px; }
+  .sp-pfill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent1), var(--accent2)); transition: width .7s cubic-bezier(.34,1.56,.64,1); }
+  .sp-pct { font-size: 11px; font-weight: 700; color: var(--muted); }
+
+  /* Journey */
+  .sp-journey { display: flex; align-items: center; max-width: 700px; margin: 0 auto 20px; overflow-x: auto; scrollbar-width: none; padding: 4px; }
+  .sp-journey::-webkit-scrollbar { display: none; }
+  .sp-jnode { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; min-width: 60px; }
+  .sp-jdot { width: 30px; height: 30px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; transition: all .3s; }
+  .sp-jdot.done { background: #34d399; border-color: #34d399; color: #fff; box-shadow: 0 0 12px rgba(52,211,153,.45); }
+  .sp-jdot.active { border-color: var(--accent1); color: var(--accent1); animation: sp-pulse 2s ease-in-out infinite; }
+  @keyframes sp-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(108,99,255,.4)} 50%{box-shadow:0 0 0 6px rgba(108,99,255,0)} }
+  .sp-jlabel { font-size: 8px; color: var(--muted); text-align: center; white-space: nowrap; }
+  .sp-jline { flex: 1; height: 2px; background: var(--border); min-width: 12px; transition: background .4s; }
+  .sp-jline.done { background: #34d399; }
+
+  /* Level tabs */
+  .sp-lvtabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+  .sp-lvtab { display: flex; align-items: center; gap: 5px; padding: 7px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; font-family: 'Outfit', sans-serif; }
+  .sp-lvtab:hover { color: var(--text); border-color: var(--border-hover); }
+  .sp-lvtab.active { color: var(--text); }
+  .sp-lvtab[data-spv="all"].active { background: rgba(108,99,255,.2); border-color: rgba(108,99,255,.4); }
+  .sp-lvtab[data-spv="freshman"].active { background: rgba(56,189,248,.14); border-color: rgba(56,189,248,.4); color: #38bdf8; }
+  .sp-lvtab[data-spv="sophomore"].active { background: rgba(167,139,250,.14); border-color: rgba(167,139,250,.4); color: #a78bfa; }
+  .sp-lvtab[data-spv="junior"].active { background: rgba(52,211,153,.12); border-color: rgba(52,211,153,.35); color: #34d399; }
+  .sp-lvtab[data-spv="senior"].active { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.35); color: #f43f5e; }
+  .sp-lvtab[data-spv="summer"].active { background: rgba(251,191,36,.12); border-color: rgba(251,191,36,.35); color: #fbbf24; }
+  .sp-ldot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Semester sections */
+  .sp-sem { margin-bottom: 36px; }
+  .sp-sem.hidden { display: none; }
+  .sp-sem-head { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .sp-sem-badge { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; }
+  .sp-sem-info { flex: 1; }
+  .sp-sem-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .sp-sem-sub { font-size: 11px; color: var(--muted); }
+  .sp-sem-mini { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .sp-mini-track { width: 72px; height: 5px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .sp-mini-fill { height: 100%; border-radius: 999px; transition: width .4s; }
+  .sp-mini-txt { font-size: 10.5px; color: var(--muted); font-weight: 600; min-width: 28px; text-align: right; }
+
+  /* Course card grid */
+  .sp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 9px; }
+  .sp-ccard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 7px; position: relative; overflow: hidden; transition: transform .2s, border-color .2s, box-shadow .2s; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .sp-ccard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.5px; background: var(--sp-cc, #6c63ff); opacity: .65; border-radius: 14px 14px 0 0; }
+  .sp-ccard:hover { transform: translateY(-3px); border-color: var(--border-hover); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .sp-ccard.done { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.2); }
+  .sp-ccard.done .sp-cname { text-decoration: line-through; color: var(--muted); }
+  .sp-check { display: none; position: absolute; top: 9px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: #34d399; color: #fff; font-size: 10px; font-weight: 700; align-items: center; justify-content: center; }
+  .sp-ccard.done .sp-check { display: flex; animation: sp-pop .3s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes sp-pop { from{transform:scale(0)} to{transform:scale(1)} }
+  .sp-ctop { display: flex; align-items: flex-start; gap: 8px; }
+  .sp-cemoji { width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; font-size: 17px; line-height: 1; transition: transform .2s; }
+  .sp-ccard:hover .sp-cemoji { transform: scale(1.1); }
+  .sp-ccard.done .sp-cemoji { opacity: .5; }
+  .sp-ctitles { flex: 1; min-width: 0; padding-right: 12px; }
+  .sp-cname { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.35; margin-bottom: 2px; }
+  .sp-ccode { font-size: 9.5px; color: var(--muted); font-weight: 500; }
+  .sp-cbadges { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .sp-badge { font-size: 8.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; border: 1px solid; }
+  .sp-chr { background: rgba(255,255,255,.05); color: var(--muted); border-color: var(--border); font-size: 9px; font-weight: 600; letter-spacing: 0; }
+  .sp-tut { background: rgba(251,191,36,.1); color: #fbbf24; border-color: rgba(251,191,36,.25); }
+  .sp-new { background: rgba(244,63,94,.1); color: #f43f5e; border-color: rgba(244,63,94,.25); }
+  .sp-b-math{background:rgba(245,158,11,.12);color:#f59e0b;border-color:rgba(245,158,11,.28);}
+  .sp-b-physics{background:rgba(56,189,248,.12);color:#38bdf8;border-color:rgba(56,189,248,.28);}
+  .sp-b-programming{background:rgba(167,139,250,.12);color:#a78bfa;border-color:rgba(167,139,250,.28);}
+  .sp-b-circuits{background:rgba(52,211,153,.12);color:#34d399;border-color:rgba(52,211,153,.28);}
+  .sp-b-signals{background:rgba(251,146,60,.12);color:#fb923c;border-color:rgba(251,146,60,.28);}
+  .sp-b-comms{background:rgba(34,211,238,.12);color:#22d3ee;border-color:rgba(34,211,238,.28);}
+  .sp-b-systems{background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.28);}
+  .sp-b-engineering{background:rgba(99,102,241,.12);color:#818cf8;border-color:rgba(99,102,241,.28);}
+  .sp-b-general{background:rgba(148,163,184,.1);color:#94a3b8;border-color:rgba(148,163,184,.22);}
+  .sp-b-project{background:rgba(244,63,94,.12);color:#f43f5e;border-color:rgba(244,63,94,.28);}
+  .sp-b-elective{background:rgba(192,132,252,.12);color:#c084fc;border-color:rgba(192,132,252,.28);}
+  .sp-clinks { display: flex; gap: 4px; flex-wrap: wrap; }
+  .sp-link-btn { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 600; font-family: 'Outfit', sans-serif; padding: 3px 9px; border-radius: 7px; border: 1px solid; cursor: pointer; transition: all .2s; text-decoration: none; }
+  .sp-link-btn:hover { transform: translateY(-1px); }
+  .sp-drive { color: #4ade80; background: rgba(74,222,128,.08); border-color: rgba(74,222,128,.25); }
+  .sp-drive:hover { background: rgba(74,222,128,.16); }
+  .sp-video { color: #f87171; background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.25); }
+  .sp-video:hover { background: rgba(248,113,113,.16); }
+
+  /* All done banner */
+  .sp-done-banner { display: none; text-align: center; padding: 24px; background: linear-gradient(135deg, rgba(52,211,153,.1), rgba(108,99,255,.1)); border: 1px solid rgba(52,211,153,.25); border-radius: 16px; margin-bottom: 28px; }
+  .sp-done-banner h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #34d399; margin-bottom: 4px; }
+  .sp-done-banner p { font-size: 12.5px; color: var(--muted); }
+
+  /* Confetti */
+  .sp-cf { position: fixed; pointer-events: none; z-index: 9999; width: 8px; height: 8px; border-radius: 2px; animation: sp-cfall 1s ease-in forwards; }
+  @keyframes sp-cfall { from{transform:translateY(-10px) rotate(0deg);opacity:1} to{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+  /* ── PRINT / PDF STYLES ── */
+  @media print {
+    .scroll-top, .theme-toggle, .tab-nav, .top-bar, header,
+    footer, #panel-drive, #panel-videos, #panel-wall, #panel-tutoring,
+    .sp-bar-actions, .sp-lvtabs, .sp-journey, .sp-done-banner,
+    .sp-id-entry, .sp-clinks, .sp-check { display: none !important; }
+
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body, .page-wrap { background: #fff !important; color: #111 !important; margin: 0 !important; }
+    .tab-panel { display: none !important; }
+    #panel-studyplan { display: block !important; padding: 0 !important; }
+
+    .sp-print-header { display: block !important; padding: 16px 0 12px; border-bottom: 2px solid #e5e7eb; margin-bottom: 20px; }
+    .sp-print-header h2 { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 4px; }
+    .sp-print-header p { font-size: 12px; color: #555; }
+
+    .sp-bar { background: #f9f9f9 !important; border: 1px solid #e5e7eb !important; margin-bottom: 14px; }
+    .sp-bar-id { color: #111 !important; } .sp-bar-plan { color: #555 !important; }
+    .sp-stats { background: #f9f9f9 !important; border: 1px solid #e5e7eb !important; margin-bottom: 16px; }
+    .sp-stat-v { color: #111 !important; } .sp-stat-l { color: #555 !important; }
+
+    .sp-sem.hidden { display: block !important; }
+    .sp-sem { page-break-inside: avoid; margin-bottom: 24px; }
+    .sp-sem-head { border-bottom: 1px solid #e5e7eb; }
+    .sp-sem-name { color: #111 !important; font-size: 14px !important; }
+    .sp-sem-sub, .sp-mini-txt { color: #555 !important; }
+
+    .sp-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
+    .sp-ccard { background: #f9f9f9 !important; border: 1px solid #e0e0e0 !important; box-shadow: none !important; transform: none !important; break-inside: avoid; }
+    .sp-ccard::before { opacity: 1 !important; }
+    .sp-ccard.done { background: #f0fdf4 !important; border-color: #86efac !important; }
+    .sp-ccard.done .sp-cname { text-decoration: line-through !important; color: #888 !important; }
+    .sp-ccard.done .sp-cemoji { opacity: .5 !important; }
+    .sp-cname { color: #111 !important; font-size: 11px !important; }
+    .sp-ccode { color: #555 !important; }
+    .sp-chr { color: #555 !important; background: #eee !important; border-color: #ccc !important; }
+
+    /* Print check badge */
+    .sp-ccard.done .sp-print-check { display: flex !important; }
+    .sp-print-check { display: none; position: absolute; top: 7px; right: 8px; width: 18px; height: 18px; border-radius: 50%; background: #34d399; color: #fff; font-size: 9px; font-weight: 700; align-items: center; justify-content: center; }
+  }
+
+  @media (max-width: 640px) {
+    .sp-stats { grid-template-columns: 1fr 1fr; }
+    .sp-stat:nth-child(3) { grid-column: 1/3; border-right: none; border-top: 1px solid var(--border); padding: 10px 0 0; margin-top: 8px; }
+    .sp-pbar-wrap { grid-column: 1/3; padding: 10px 0 0; border-top: 1px solid var(--border); }
+    .sp-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); }
+    .sp-plan-picker { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+  <span class="icon-dark">🌙</span>
+  <span class="icon-light">☀️</span>
+</button>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" id="scrollTop">↑</button>
+
+<!-- PWA Install Banner -->
+<div id="installBanner" class="install-banner" style="display:none;">
+  <div class="install-banner-inner">
+    <span class="install-icon">📲</span>
+    <div class="install-text">
+      <strong>Install this app</strong>
+      <span id="installSubtext">Add to your home screen for quick, app-like access.</span>
+    </div>
+    <button id="installBtn" class="install-btn">Install</button>
+    <button id="installDismiss" class="install-dismiss" title="Dismiss">✕</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <header>
+    <p class="blessing">هذا العمل خالص لوجه الله ❤️ — For the sake of Allah</p>
+    <h1>Course Materials<br>Hub</h1>
+    <p>Spring 2026 · Computer Engineering · University of Sharjah</p>
+    <div class="divider"></div>
+  </header>
+
+  <!-- TAB NAVIGATION -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('drive', this)">
+      <span class="tab-icon">📚</span> Course Drive <span class="tab-count">44</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('videos', this)">
+      <span class="tab-icon">🎬</span> Eng. Ahmed Videos <span class="tab-count">7</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('wall', this)">
+      <span class="tab-icon">💬</span> Community Wall
+    </button>
+    <button class="tab-btn" onclick="switchTab('tutoring', this)">
+      <span class="tab-icon">📲</span> Private Tutoring
+    </button>
+    <button class="tab-btn" onclick="switchTab('studyplan', this)">
+      <span class="tab-icon">📋</span> My Study Plan
+    </button>
+  </div>
+
+  <!-- =================== DRIVE TAB =================== -->
+  <div class="tab-panel active" id="panel-drive">
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num" id="total-count">44</div>
+        <div class="stat-label">Courses</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Google</div>
+        <div class="stat-label">Drive Hosted</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Free</div>
+        <div class="stat-label">For All</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search" placeholder="Search courses…" autocomplete="off">
+      </div>
+      <div class="filter-pills">
+        <button class="pill active" data-filter="all">All <span class="count-indicator" id="count-all">44</span></button>
+        <button class="pill" data-filter="advanced">Advanced</button>
+        <button class="pill" data-filter="core">Core</button>
+        <button class="pill" data-filter="lab">Lab</button>
+        <button class="pill" data-filter="math">Math</button>
+        <button class="pill" data-filter="general">General</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid">
+      <a class="card" href="https://drive.google.com/drive/folders/1wcXkqd0SgSb8FRaRtzxxxhAcywWQbhuj" target="_blank" rel="noopener" data-cat="advanced" data-name="Computer and Network Security"><div class="card-top"><div class="emoji-wrap bg-purple">🔐</div><span class="badge badge-advanced">Advanced</span></div><h3>Computer and Network Security</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1fM6FVQ3QxPO5lWFp72zhu-XkQYg3QD6z" target="_blank" rel="noopener" data-cat="advanced" data-name="Digital Image Processing"><div class="card-top"><div class="emoji-wrap bg-blue">🖼️</div><span class="badge badge-advanced">Advanced</span></div><h3>Digital Image Processing</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1et3bCqD8_HqSpocOttVh8ayils3FMPQG" target="_blank" rel="noopener" data-cat="general" data-name="Professional and Social Issues in Engineering"><div class="card-top"><div class="emoji-wrap bg-pink">🤝</div><span class="badge badge-general">General</span></div><h3>Professional &amp; Social Issues in Engineering</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1tuhCKIImEmIHlVwTZRFG652qftwXYW1k" target="_blank" rel="noopener" data-cat="advanced" data-name="Embedded Systems Design"><div class="card-top"><div class="emoji-wrap bg-green">🤖</div><span class="badge badge-advanced">Advanced</span></div><h3>Embedded Systems Design</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1tLk4qj94S7IZLsZxE-MAV2Cc4SreTMuN" target="_blank" rel="noopener" data-cat="general" data-name="Technical Writing"><div class="card-top"><div class="emoji-wrap bg-pink">✍️</div><span class="badge badge-general">General</span></div><h3>Technical Writing</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/11PbEJszDc1Z2mvPNGBVSkfNra-Z34sh7" target="_blank" rel="noopener" data-cat="core" data-name="Feedback Control Systems"><div class="card-top"><div class="emoji-wrap bg-purple">🎛️</div><span class="badge badge-core">Core</span></div><h3>Feedback Control Systems</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1ufrQgcrmuRKHwrDLX_Td4wEtulMjYhFH" target="_blank" rel="noopener" data-cat="core" data-name="Computer Communications and Networks"><div class="card-top"><div class="emoji-wrap bg-blue">📡</div><span class="badge badge-core">Core</span></div><h3>Computer Communications and Networks</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1X0yLaGjIciuF0RS4j8VfPGHg4lKZrNIe" target="_blank" rel="noopener" data-cat="general" data-name="Engineering Economics"><div class="card-top"><div class="emoji-wrap bg-amber">💰</div><span class="badge badge-general">General</span></div><h3>Engineering Economics</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1IsFK1jIa3tC1hskhuYuxMQTT-hj_hMDD" target="_blank" rel="noopener" data-cat="lab" data-name="Lab Microprocessors and Assembly Language"><div class="card-top"><div class="emoji-wrap bg-green">⌨️</div><span class="badge badge-lab">Lab</span></div><h3>Lab — Microprocessors &amp; Assembly Language</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1kQ_0CsfTQd4oDyY0RydJRBqDXCKJ3B3y" target="_blank" rel="noopener" data-cat="core" data-name="Microprocessors and Assembly Language"><div class="card-top"><div class="emoji-wrap bg-purple">⚙️</div><span class="badge badge-core">Core</span></div><h3>Microprocessors &amp; Assembly Language</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1KPxMJFTA11KSAAOlx3hUBbG7P9V7zGM4" target="_blank" rel="noopener" data-cat="core" data-name="Operating Systems"><div class="card-top"><div class="emoji-wrap bg-blue">🖥️</div><span class="badge badge-core">Core</span></div><h3>Operating Systems</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1UqIX2SU7EgOKAAEpp0_zaUzNF05ObQur" target="_blank" rel="noopener" data-cat="advanced" data-name="Software Engineering"><div class="card-top"><div class="emoji-wrap bg-purple">🛠️</div><span class="badge badge-advanced">Advanced</span></div><h3>Software Engineering</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1Flrd-ikBxknf4pWkbXtNIR4udaMZc90S" target="_blank" rel="noopener" data-cat="lab" data-name="Fundamentals of Electrical Circuits Lab"><div class="card-top"><div class="emoji-wrap bg-green">🔌</div><span class="badge badge-lab">Lab</span></div><h3>Fund. of Electrical Circuits Lab</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/12fctVgzxVVg8b2zWRhhdWpq8UaROrn2x" target="_blank" rel="noopener" data-cat="lab" data-name="Digital Logic Design Lab"><div class="card-top"><div class="emoji-wrap bg-green">💻</div><span class="badge badge-lab">Lab</span></div><h3>Digital Logic Design Lab</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1FLJSJFhOXRFCDA837a0vqC4b3jSpPuQY" target="_blank" rel="noopener" data-cat="core" data-name="Fundamentals of Electrical Circuits"><div class="card-top"><div class="emoji-wrap bg-amber">⚡</div><span class="badge badge-core">Core</span></div><h3>Fund. of Electrical Circuits</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/18y64zhSR7m7cWbgOE8v0vGnpJV0oqkG6" target="_blank" rel="noopener" data-cat="core" data-name="Introduction to DBMS"><div class="card-top"><div class="emoji-wrap bg-blue">🗃️</div><span class="badge badge-core">Core</span></div><h3>Intro to DBMS</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1CY-hiiPre19OTW1ICelSmCUo1hg8NKdz" target="_blank" rel="noopener" data-cat="core" data-name="Random Signal Theory"><div class="card-top"><div class="emoji-wrap bg-purple">🎲</div><span class="badge badge-core">Core</span></div><h3>Random Signal Theory</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1jPRNeuack64o2pSxNoA-Yo8cdYz4ftyY" target="_blank" rel="noopener" data-cat="core" data-name="Signals and Systems"><div class="card-top"><div class="emoji-wrap bg-blue">📶</div><span class="badge badge-core">Core</span></div><h3>Signals and Systems</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1XBfWtzwVKl9LQTNSV5pRCrgzi9XPet_X" target="_blank" rel="noopener" data-cat="math" data-name="Engineering Computation and Linear Algebra"><div class="card-top"><div class="emoji-wrap bg-amber">📐</div><span class="badge badge-math">Math</span></div><h3>Eng. Computation &amp; Linear Algebra</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1t7hJ2XK6lkWu2PKmHwKtSUKYUDz_dpqJ" target="_blank" rel="noopener" data-cat="core" data-name="Data Structures"><div class="card-top"><div class="emoji-wrap bg-purple">🧠</div><span class="badge badge-core">Core</span></div><h3>Data Structures</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1t3tkFS-p-8DZx9NYRXzQO63xOllsrhpG" target="_blank" rel="noopener" data-cat="core" data-name="Circuit Analysis I"><div class="card-top"><div class="emoji-wrap bg-amber">🔋</div><span class="badge badge-core">Core</span></div><h3>Circuit Analysis I</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1x0IM7uBSsiPfI5UxNY7GhAAs-jW8n_lH" target="_blank" rel="noopener" data-cat="lab" data-name="Circuit Analysis I Lab"><div class="card-top"><div class="emoji-wrap bg-green">🧪</div><span class="badge badge-lab">Lab</span></div><h3>Circuit Analysis I Lab</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1DBwDhMOOBr6Mq2ME5048aHuh4sjJ05wI" target="_blank" rel="noopener" data-cat="core" data-name="Digital Logic Design DLD"><div class="card-top"><div class="emoji-wrap bg-blue">🔧</div><span class="badge badge-core">Core</span></div><h3>Digital Logic Design (DLD)</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1qFkgr2Glixb1o0alg10v5ZQpzt4i-2BL" target="_blank" rel="noopener" data-cat="core" data-name="DLD Tutorials Eng Ahmed Spr25"><div class="card-top"><div class="emoji-wrap bg-blue">📘</div><span class="badge badge-core">Core</span></div><h3>DLD Tutorials — Eng. Ahmed (Spr25)</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1JVfW4tAJbBw59CEGetBFmMXFOSb8yOO5" target="_blank" rel="noopener" data-cat="lab" data-name="Physics 2 Lab"><div class="card-top"><div class="emoji-wrap bg-green">🧲</div><span class="badge badge-lab">Lab</span></div><h3>Physics 2 Lab</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1E-9fJsbkRPiL-eEUAodmE4UMdpCtnNv7" target="_blank" rel="noopener" data-cat="math" data-name="Differential Equations for Engineers"><div class="card-top"><div class="emoji-wrap bg-amber">📉</div><span class="badge badge-math">Math</span></div><h3>Differential Equations for Engineers</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1CRittODGWsN6KLj26AXCS5Vd4sZ1PepA" target="_blank" rel="noopener" data-cat="general" data-name="Fundamentals of Innovation and Entrepreneurship"><div class="card-top"><div class="emoji-wrap bg-pink">🚀</div><span class="badge badge-general">General</span></div><h3>Fund. of Innovation &amp; Entrepreneurship</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1YFNdf7IkiyTGVmOXS2FjVi-f1bmxVpem" target="_blank" rel="noopener" data-cat="core" data-name="Programming 2"><div class="card-top"><div class="emoji-wrap bg-blue">👨‍💻</div><span class="badge badge-core">Core</span></div><h3>Programming 2</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1oP5fmwahpm4Qw0dc7AsJMbG6c2GIuKS1" target="_blank" rel="noopener" data-cat="core" data-name="Physics 2"><div class="card-top"><div class="emoji-wrap bg-blue">🌌</div><span class="badge badge-core">Core</span></div><h3>Physics 2</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1JOSFuXAAGPCqc-6ESZyhunkIARk5xhf3" target="_blank" rel="noopener" data-cat="lab" data-name="Physics 1 Lab"><div class="card-top"><div class="emoji-wrap bg-green">🔬</div><span class="badge badge-lab">Lab</span></div><h3>Physics 1 Lab</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/105IWSNacp5HLt6em1SGboIMoyXfcFbZD" target="_blank" rel="noopener" data-cat="math" data-name="Discrete Math for Engineering"><div class="card-top"><div class="emoji-wrap bg-amber">🧮</div><span class="badge badge-math">Math</span></div><h3>Discrete Math for Engineering</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1DXzPgDV_VbKKzZJleRgn2om8BJ2yrifG" target="_blank" rel="noopener" data-cat="math" data-name="Calculus II for Engineering"><div class="card-top"><div class="emoji-wrap bg-amber">➗</div><span class="badge badge-math">Math</span></div><h3>Calculus II for Engineering</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1sDqUNQMffx_cG5EjdllaFjRcy_DYagT8" target="_blank" rel="noopener" data-cat="general" data-name="Analytical Biography of the Prophet"><div class="card-top"><div class="emoji-wrap bg-green">📜</div><span class="badge badge-general">General</span></div><h3>Analytical Biography of the Prophet</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1xmUGq5uUJj4_FRsvzXQ2u0FgQG_tHUpP" target="_blank" rel="noopener" data-cat="core" data-name="Programming 1"><div class="card-top"><div class="emoji-wrap bg-blue">💾</div><span class="badge badge-core">Core</span></div><h3>Programming 1</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1Qapw0WLk8gd8ob8HwYSAJomFGxEnQHiT" target="_blank" rel="noopener" data-cat="core" data-name="Physics 1"><div class="card-top"><div class="emoji-wrap bg-blue">🌠</div><span class="badge badge-core">Core</span></div><h3>Physics 1</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1yFnzvBvz8kbXIBKdTiiKGGuukK1nji9S" target="_blank" rel="noopener" data-cat="general" data-name="Introduction to IT"><div class="card-top"><div class="emoji-wrap bg-pink">💼</div><span class="badge badge-general">General</span></div><h3>Intro to IT</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1BJE9EPmkgqWelz1OpadiPgjpiL8c9O6O" target="_blank" rel="noopener" data-cat="general" data-name="Introduction to CPE"><div class="card-top"><div class="emoji-wrap bg-pink">🧭</div><span class="badge badge-general">General</span></div><h3>Intro to CPE</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/16rrqz5WTQTCnrrYubb3q8_44mlAg5fnW" target="_blank" rel="noopener" data-cat="lab" data-name="General Chemistry Lab"><div class="card-top"><div class="emoji-wrap bg-green">⚗️</div><span class="badge badge-lab">Lab</span></div><h3>General Chemistry Lab</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1783MZqOhoKN5P7hm9L2d5bbzc2YdoXD" target="_blank" rel="noopener" data-cat="math" data-name="Calculus I for Engineering"><div class="card-top"><div class="emoji-wrap bg-amber">➕</div><span class="badge badge-math">Math</span></div><h3>Calculus I for Engineering</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1SbtbGQugTGABRdTiAgsCLDsrUQpqCa8J" target="_blank" rel="noopener" data-cat="general" data-name="Islamic Culture"><div class="card-top"><div class="emoji-wrap bg-green">🕌</div><span class="badge badge-general">General</span></div><h3>Islamic Culture</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1uAr2mrvwejtJbdnbcEo_zWE4NNG5sm1G" target="_blank" rel="noopener" data-cat="general" data-name="General Chemistry"><div class="card-top"><div class="emoji-wrap bg-green">🧪</div><span class="badge badge-general">General</span></div><h3>General Chemistry</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1wLdtVHsuSG-i_iF43q521Pb88oyM2hqM" target="_blank" rel="noopener" data-cat="general" data-name="English for Academic Purposes"><div class="card-top"><div class="emoji-wrap bg-pink">📝</div><span class="badge badge-general">General</span></div><h3>English for Academic Purposes</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1oRQ4JP2Vd1_o-8kfLaBjQF2Y0j4hBYOe" target="_blank" rel="noopener" data-cat="general" data-name="Arabic for Non-Arab"><div class="card-top"><div class="emoji-wrap bg-pink">🗣️</div><span class="badge badge-general">General</span></div><h3>Arabic for Non-Arabs</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card" href="https://drive.google.com/drive/folders/1SYDcCVfXmEcAbr9_lo8oJRxYzSwFdNKF" target="_blank" rel="noopener" data-cat="advanced" data-name="Telecommunication Systems"><div class="card-top"><div class="emoji-wrap bg-blue">🛰️</div><span class="badge badge-advanced">Advanced</span></div><h3>Telecommunication Systems</h3><div class="card-footer"><span class="open-label">Open Drive →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+
+      <div class="empty" id="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No courses found</h3>
+        <p>Try a different search term or filter.</p>
+      </div>
+    </div>
+  </div><!-- end #panel-drive -->
+
+  <!-- =================== VIDEOS TAB =================== -->
+  <div class="tab-panel" id="panel-videos">
+    <div class="video-banner">
+      <div class="video-banner-inner">
+        <div class="video-banner-emoji">🎓</div>
+        <div class="video-banner-text">
+          <h2>Eng. Ahmed's Video Tutorials</h2>
+          <p>Recorded lectures and tutorial sessions — click any card to open the SharePoint folder.</p>
+        </div>
+      </div>
+    </div>
+    <div class="video-grid">
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgC0CY77wGqbRp-HQTFwekMVAbHlnd34wKAJz2zIhiGqhdE?e=4sn16C" target="_blank" rel="noopener" data-cat="video" data-name="Discrete Mathematics for Engineers"><div class="card-top"><div class="emoji-wrap bg-amber">🧮</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Discrete Mathematics for Engineers</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgDYkCaShZmmR6zXvW_BnRKYARYSL-t6ch15zL1YHD2Q8cw?e=HN5IU3" target="_blank" rel="noopener" data-cat="video" data-name="Computer Communications and Networks"><div class="card-top"><div class="emoji-wrap bg-blue">📡</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Computer Communications and Networks</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgCIYfhndRcyQ7pMc9sX0Y-_ARUKgsPUoMc3bc7H0JKsdMQ?e=bvkKja" target="_blank" rel="noopener" data-cat="video" data-name="Fundamentals of Electrical Circuits"><div class="card-top"><div class="emoji-wrap bg-purple">⚡</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Fund. of Electrical Circuits</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgBj1INwEAlNSIUlanybgNGtARA0_gKcPw3EjT3J9V91-BY?e=9lgh7F" target="_blank" rel="noopener" data-cat="video" data-name="Microprocessors and Assembly Language"><div class="card-top"><div class="emoji-wrap bg-green">⚙️</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Microprocessors &amp; Assembly Language</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgAQf_l728BFRrs67DGKRIZiAaRFfshdy8kyLZ-SPdtBsts?e=fQtLU1" target="_blank" rel="noopener" data-cat="video" data-name="Operating Systems"><div class="card-top"><div class="emoji-wrap bg-blue">🖥️</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Operating Systems</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgAzDQsh6UA5RrFyyLMIZ-clAb0_WlaQ-ub4ZScLZpQOdfE?e=gNC0Cu" target="_blank" rel="noopener" data-cat="video" data-name="Signals and Systems"><div class="card-top"><div class="emoji-wrap bg-coral">📶</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Signals and Systems</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+      <a class="card video-card" href="https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgDeb-D9kmZsRaDDVgiHMagUAVQ7sOCGlBOoSDTrW14cbBk?e=neQaoD" target="_blank" rel="noopener" data-cat="video" data-name="DLD Summer Tutorials Digital Logic Design"><div class="card-top"><div class="emoji-wrap bg-pink">🔧</div><span class="badge badge-video"><span class="play-dot"></span>Videos</span></div><h3>Summer Tutorials — Digital Logic Design</h3><div class="card-footer"><span class="open-label">Watch Videos →</span><div class="arrow-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></div></div></a>
+    </div>
+  </div><!-- end #panel-videos -->
+
+  <!-- =================== CONTACT TAB =================== -->
+  <!-- =================== COMMUNITY WALL TAB =================== -->
+  <div class="tab-panel" id="panel-wall">
+    <div class="comments-section">
+      <div class="section-header">
+        <h2>💬 Community Wall</h2>
+        <p>Leave a kind word, a shoutout, or anything you want the whole community to see. All comments are public.</p>
+      </div>
+
+      <div class="comments-submit">
+        <h3>✍️ Leave a Comment</h3>
+        <div class="comment-name-row">
+          <input type="text" id="commenterName" placeholder="Your name (e.g. Fatima · Year 2)">
+        </div>
+        <div class="comment-input-row">
+          <textarea id="commentText" placeholder="Share your thoughts, a thank you, or something that helped you… 🌟"></textarea>
+        </div>
+        <br>
+        <button class="post-btn" onclick="postComment()">Post →</button>
+      </div>
+
+      <div class="comments-wall" id="commentsWall">
+        <!-- seed comments so the wall isn't empty -->
+      </div>
+    </div>
+  </div><!-- end #panel-wall -->
+
+  <!-- =================== TUTORING TAB =================== -->
+  <div class="tab-panel" id="panel-tutoring">
+    <div class="tutoring-section">
+
+      <div class="section-header">
+        <h2>📲 Private Tutoring Sessions</h2>
+        <p>Need extra help? Book a one-on-one study session with Eng. Ahmed directly on WhatsApp — click the button or scan the QR code below.</p>
+      </div>
+
+      <!-- Price badge -->
+      <div class="tutor-price-badge">
+        <span class="tutor-price-icon">💰</span>
+        <div>
+          <div class="tutor-price-num">50 AED <span style="font-size:14px;font-weight:500;opacity:0.75;">/ hour</span></div>
+          <div class="tutor-price-label">Per session · Flexible scheduling</div>
+        </div>
+      </div>
+
+      <!-- WhatsApp CTA -->
+      <a class="wa-cta-btn" href="https://wa.me/971521062675?text=Hello%20Eng.%20Ahmed%2C%20I%20would%20like%20to%20book%20a%20private%20tutoring%20session." target="_blank" rel="noopener">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.099 1.51 5.819L.057 23.5a.5.5 0 0 0 .614.612l5.756-1.493A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 0 1-5.032-1.369l-.36-.213-3.733.968.993-3.639-.234-.374A9.862 9.862 0 0 1 2.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/></svg>
+        Chat on WhatsApp — Book Now
+      </a>
+
+      <!-- QR Code + instructions -->
+      <div class="tutor-qr-wrap">
+        <div class="tutor-qr-box">
+          <div id="wa-qr-canvas" style="border-radius:12px;overflow:hidden;background:#fff;padding:10px;display:inline-block;"></div>
+          <div class="tutor-qr-label">Scan with your camera 📷</div>
+        </div>
+        <div class="tutor-qr-info">
+          <h3>How it works</h3>
+          <ol class="tutor-steps">
+            <li><span>1</span> Click the WhatsApp button above <em>or</em> scan the QR code</li>
+            <li><span>2</span> Send a quick message mentioning the course you need help with</li>
+            <li><span>3</span> We'll agree on a time — sessions are 50 AED / hour</li>
+            <li><span>4</span> Show up ready and let's get it done 💪</li>
+          </ol>
+          <div class="tutor-contact-row">
+            <span>📞</span>
+            <div>
+              <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">WhatsApp Number</div>
+              <a href="https://wa.me/971521062675" target="_blank" rel="noopener" style="font-family:'Syne',sans-serif;font-weight:700;color:var(--text);text-decoration:none;font-size:16px;">+971 52 106 2675</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specialty Courses -->
+      <div class="tutor-courses-header">
+        <h3>🎯 Specialty Courses I Tutor</h3>
+        <p>I have deep experience in these subjects and can walk you through them step by step.</p>
+      </div>
+      <div class="tutor-courses-grid">
+        <div class="tutor-course-card tc-purple">
+          <div class="tc-icon">🔧</div>
+          <div class="tc-name">Digital Logic Design</div>
+          <div class="tc-code">DLD</div>
+        </div>
+        <div class="tutor-course-card tc-blue">
+          <div class="tc-icon">⚙️</div>
+          <div class="tc-name">Microprocessors &amp; Assembly Language</div>
+          <div class="tc-code">Microprocessors</div>
+        </div>
+        <div class="tutor-course-card tc-amber">
+          <div class="tc-icon">📐</div>
+          <div class="tc-name">Linear Algebra &amp; Engineering Computation</div>
+          <div class="tc-code">Linear Algebra</div>
+        </div>
+        <div class="tutor-course-card tc-coral">
+          <div class="tc-icon">📶</div>
+          <div class="tc-name">Signals and Systems</div>
+          <div class="tc-code">Signals &amp; Systems</div>
+        </div>
+        <div class="tutor-course-card tc-blue2">
+          <div class="tc-icon">📡</div>
+          <div class="tc-name">Computer Communications &amp; Networks</div>
+          <div class="tc-code">Computer Comm.</div>
+        </div>
+        <div class="tutor-course-card tc-green">
+          <div class="tc-icon">🧮</div>
+          <div class="tc-name">Discrete Mathematics for Engineers</div>
+          <div class="tc-code">Discrete Math</div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end #panel-tutoring -->
+  <!-- ═══════════════════════════════════════════
+       STUDY PLAN PANEL
+  ═══════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-studyplan">
+
+    <!-- Hidden print-only header -->
+    <div class="sp-print-header" style="display:none">
+      <h2>CPE Study Plan — University of Sharjah</h2>
+      <p id="sp-print-subtitle">Computer Engineering Program</p>
+    </div>
+
+    <!-- ID ENTRY (shown when no student logged in) -->
+    <div class="sp-id-entry" id="spIdEntry">
+      <span class="sp-logo">📋</span>
+      <h3>Your Study Plan</h3>
+      <p>Enter your University ID to track your personal progress. Each course you complete stays saved — and you can download a personalised PDF anytime.</p>
+      <div class="sp-id-wrap">
+        <span class="sp-prefix">U</span>
+        <input class="sp-id-input" id="spIdInput" type="text" inputmode="numeric"
+               maxlength="8" placeholder="22200482  (8 digits)" autocomplete="off">
+      </div>
+      <div class="sp-err-msg" id="spErrMsg"></div>
+      <div class="sp-plan-picker">
+        <div class="sp-plan-opt sel" data-plan="fall2022" onclick="spPickPlan(this)">
+          <span class="po-title">Fall 2022</span>
+          <span>Spring 2022–23 curriculum</span>
+        </div>
+        <div class="sp-plan-opt" data-plan="fall2023" onclick="spPickPlan(this)">
+          <span class="po-title">Fall 2023</span>
+          <span>Spring 2023–24 curriculum</span>
+          <span class="po-new">⚡ Updated</span>
+        </div>
+      </div>
+      <button class="sp-start-btn" id="spStartBtn">Start Tracking →</button>
+      <p class="sp-privacy">☁️ Progress synced to Firebase — works on any device</p>
+    </div>
+
+    <!-- MAIN PLAN VIEW (shown after ID entry) -->
+    <div id="spMain" style="display:none">
+
+      <!-- Student bar -->
+      <div class="sp-bar">
+        <div class="sp-bar-left">
+          <div class="sp-avatar" id="spAvatar">??</div>
+          <div>
+            <div class="sp-bar-id" id="spBarId">—</div>
+            <div class="sp-bar-plan" id="spBarPlan">—</div>
+            <div class="sp-sync-status" id="spSyncStatus"></div>
+          </div>
+        </div>
+        <div class="sp-bar-actions">
+          <button class="sp-bar-btn primary" onclick="spDownloadPDF()">⬇ Download Study Plan PDF</button>
+          <button class="sp-bar-btn" onclick="spSwitchPlan()">⇄ Switch Plan</button>
+          <button class="sp-bar-btn danger" onclick="spLogout()">✕ Logout</button>
+          <button class="sp-bar-btn" onclick="spResetProgress()">↺ Reset</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="sp-stats">
+        <div class="sp-stat">
+          <div class="sp-stat-v"><span id="spDone">0</span><span class="sp-sub"> / <span id="spTotal">—</span></span></div>
+          <div class="sp-stat-l">Courses Done</div>
+        </div>
+        <div class="sp-stat">
+          <div class="sp-stat-v"><span id="spChrDone">0</span><span class="sp-sub"> / <span id="spChrTotal">—</span> CHr</span></div>
+          <div class="sp-stat-l">Credit Hours</div>
+        </div>
+        <div class="sp-stat">
+          <div class="sp-stat-v"><span id="spPct">0%</span></div>
+          <div class="sp-stat-l">Complete</div>
+        </div>
+        <div class="sp-pbar-wrap">
+          <div class="sp-pbar"><div class="sp-pfill" id="spPFill" style="width:0%"></div></div>
+          <div class="sp-pct" id="spPctLbl">0%</div>
+        </div>
+      </div>
+
+      <!-- Journey map -->
+      <div class="sp-journey" id="spJourney"></div>
+
+      <!-- All done banner -->
+      <div class="sp-done-banner" id="spDoneBanner">
+        <h3>🎓 Congratulations!</h3>
+        <p>You've completed every course. May Allah bless your journey. 🤲</p>
+      </div>
+
+      <!-- Level filter tabs -->
+      <div class="sp-lvtabs">
+        <button class="sp-lvtab active" data-spv="all"><span class="sp-ldot" style="background:#6c63ff"></span>All</button>
+        <button class="sp-lvtab" data-spv="freshman"><span class="sp-ldot" style="background:#38bdf8"></span>Freshman</button>
+        <button class="sp-lvtab" data-spv="sophomore"><span class="sp-ldot" style="background:#a78bfa"></span>Sophomore</button>
+        <button class="sp-lvtab" data-spv="junior"><span class="sp-ldot" style="background:#34d399"></span>Junior</button>
+        <button class="sp-lvtab" data-spv="summer"><span class="sp-ldot" style="background:#fbbf24"></span>Summer</button>
+        <button class="sp-lvtab" data-spv="senior"><span class="sp-ldot" style="background:#f43f5e"></span>Senior</button>
+      </div>
+
+      <!-- Semesters rendered by JS -->
+      <div id="spContainer"></div>
+
+    </div><!-- end spMain -->
+  </div><!-- end #panel-studyplan -->
+
+
+  <footer>
+    Made with <span>❤️</span> for the sake of Allah · Spring 2026 · Computer Engineering · University of Sharjah
+  </footer>
+
+</div><!-- end page-wrap -->
+
+<script>
+  /* =====================
+     THEME TOGGLE
+  ===================== */
+  var html = document.documentElement;
+  var themeBtn = document.getElementById('themeToggle');
+  var savedTheme = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-theme', savedTheme);
+
+  themeBtn.addEventListener('click', function() {
+    var current = html.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  /* =====================
+     SCROLL TO TOP
+  ===================== */
+  var scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 400) { scrollBtn.classList.add('visible'); }
+    else { scrollBtn.classList.remove('visible'); }
+  });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* =====================
+     TAB SWITCHER
+  ===================== */
+  var activeTab = 'drive';
+
+  function switchTab(tab, btn) {
+    activeTab = tab;
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('panel-' + tab).classList.add('active');
+    btn.classList.add('active');
+    var s = document.getElementById('search');
+    if (s) { s.value = ''; }
+    searchQuery = '';
+    updateDisplay();
+  }
+
+  /* =====================
+     SEARCH + FILTER
+  ===================== */
+  var cards = document.querySelectorAll('.card:not(.video-card)');
+  var searchInput = document.getElementById('search');
+  var pills = document.querySelectorAll('.pill');
+  var emptyState = document.getElementById('empty-state');
+  var activeFilter = 'all';
+  var searchQuery = '';
+
+  function updateDisplay() {
+    if (activeTab === 'drive') {
+      var visible = 0;
+      cards.forEach(function(card) {
+        var name = card.dataset.name.toLowerCase();
+        var cat = card.dataset.cat;
+        var matchSearch = name.includes(searchQuery);
+        var matchFilter = activeFilter === 'all' || cat === activeFilter;
+        if (matchSearch && matchFilter) { card.classList.remove('hidden'); visible++; }
+        else { card.classList.add('hidden'); }
+      });
+      if (emptyState) emptyState.style.display = visible === 0 ? 'block' : 'none';
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      searchQuery = e.target.value.toLowerCase().trim();
+      updateDisplay();
+    });
+  }
+
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      pills.forEach(function(p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      activeFilter = pill.dataset.filter;
+      updateDisplay();
+    });
+  });
+
+  /* =====================
+     CONTACT FORM (mailto)
+  ===================== */
+  async function sendMessage() {
+    var name  = document.getElementById('senderName').value.trim();
+    var email = document.getElementById('senderEmail').value.trim();
+    var topic = document.getElementById('msgTopic').value;
+    var body  = document.getElementById('msgBody').value.trim();
+
+    if (!body) { alert('Please write a message before sending.'); return; }
+
+    var btn = document.getElementById('sendBtn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    try {
+      // SETUP: Go to https://formspree.io, create a free form pointed at U22200482@sharjah.ac.ae
+      // Then replace YOUR_FORM_ID below with the ID they give you (e.g. xpwzgkla)
+      var FORMSPREE_ID = 'YOUR_FORM_ID';
+
+      var res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:    name || 'Anonymous',
+          email:   email || 'not provided',
+          topic:   topic || 'General',
+          message: body,
+          _subject: '[Course Hub] ' + (topic || 'Message') + (name ? ' from ' + name : '')
+        })
+      });
+
+      if (res.ok) {
+        btn.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+        setTimeout(function() {
+          document.getElementById('senderName').value = '';
+          document.getElementById('senderEmail').value = '';
+          document.getElementById('msgTopic').value = '';
+          document.getElementById('msgBody').value = '';
+          btn.style.display = 'flex';
+          btn.textContent = '✉️ Send Message';
+          btn.disabled = false;
+          document.getElementById('formSuccess').style.display = 'none';
+        }, 4000);
+      } else {
+        throw new Error('Failed');
+      }
+    } catch(e) {
+      btn.textContent = '✉️ Send Message';
+      btn.disabled = false;
+      alert('Could not send — please make sure the Formspree ID is configured in the HTML.');
+    }
+  }
+
+  // Community Wall powered by Firebase — see script block below
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // Generate WhatsApp QR code
+  new QRCode(document.getElementById('wa-qr-canvas'), {
+    text: 'https://wa.me/971521062675?text=Hello%20Eng.%20Ahmed%2C%20I%20would%20like%20to%20book%20a%20private%20tutoring%20session.',
+    width: 180,
+    height: 180,
+    colorDark: '#111120',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+
+<!-- PWA: service worker + install prompt -->
+<script>
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').catch(function (err) {
+        console.warn('Service worker registration failed:', err);
+      });
+    });
+  }
+
+  (function () {
+    var banner = document.getElementById('installBanner');
+    var installBtn = document.getElementById('installBtn');
+    var dismissBtn = document.getElementById('installDismiss');
+    var subtext = document.getElementById('installSubtext');
+    var deferredPrompt = null;
+    var DISMISS_KEY = 'pwaInstallDismissed';
+
+    function isStandalone() {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true;
+    }
+
+    function wasDismissed() {
+      try {
+        var ts = localStorage.getItem(DISMISS_KEY);
+        if (!ts) return false;
+        // Re-show after 7 days
+        return (Date.now() - parseInt(ts, 10)) < 7 * 24 * 60 * 60 * 1000;
+      } catch (e) { return false; }
+    }
+
+    function markDismissed() {
+      try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (e) {}
+      banner.style.display = 'none';
+    }
+
+    if (isStandalone() || wasDismissed()) {
+      // Already installed or user dismissed recently — don't show
+    } else {
+      var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+
+      if (isIOS) {
+        // iOS doesn't support beforeinstallprompt — show manual instructions
+        subtext.textContent = 'Tap the Share icon, then "Add to Home Screen".';
+        installBtn.style.display = 'none';
+        banner.style.display = 'block';
+      } else {
+        window.addEventListener('beforeinstallprompt', function (e) {
+          e.preventDefault();
+          deferredPrompt = e;
+          banner.style.display = 'block';
+        });
+      }
+    }
+
+    installBtn.addEventListener('click', function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function () {
+        deferredPrompt = null;
+        banner.style.display = 'none';
+      });
+    });
+
+    dismissBtn.addEventListener('click', markDismissed);
+
+    window.addEventListener('appinstalled', function () {
+      banner.style.display = 'none';
+    });
+  })();
+</script>
+
+<!-- jsPDF for study plan PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════
+   FIREBASE — Community Wall
+══════════════════════════════════════════════ */
+(function() {
+  var db, COLL = 'wall_comments', LIKED = 'cmhub_liked_v1';
+  function getLiked(){ try{ return JSON.parse(localStorage.getItem(LIKED)||'{}'); }catch(e){ return {}; } }
+  function setLiked(o){ try{ localStorage.setItem(LIKED,JSON.stringify(o)); }catch(e){} }
+  function initials(n){ var p=n.trim().split(' '); return p.length>=2?(p[0][0]+p[1][0]).toUpperCase():n.slice(0,2).toUpperCase(); }
+  function aColor(n){ var c=['linear-gradient(135deg,#6c63ff,#38bdf8)','linear-gradient(135deg,#fb7185,#f59e0b)','linear-gradient(135deg,#34d399,#38bdf8)','linear-gradient(135deg,#a78bfa,#fb7185)','linear-gradient(135deg,#fbbf24,#34d399)']; return c[n.charCodeAt(0)%c.length]; }
+  function fmtD(ts){ if(!ts)return 'Just now'; var d=ts.toDate?ts.toDate():new Date(ts),s=Math.floor((Date.now()-d)/1000); if(s<60)return 'Just now'; if(s<3600)return Math.floor(s/60)+'m ago'; if(s<86400)return Math.floor(s/3600)+'h ago'; if(s<604800)return Math.floor(s/86400)+'d ago'; return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+  function renderComments(docs){
+    var w=document.getElementById('commentsWall'), lk=getLiked();
+    if(!docs||docs.length===0){ w.innerHTML='<div class="no-comments"><span class="no-icon">💭</span>No comments yet — be the first!</div>'; return; }
+    w.innerHTML=docs.map(function(doc){ var c=doc.data(),id=doc.id,il=!!lk[id];
+      return '<div class="comment-card" id="cc_'+id+'"><div class="comment-header"><div class="comment-avatar" style="background:'+aColor(c.name||'A')+'">'+initials(c.name||'??')+'</div><div class="comment-meta"><div class="comment-name">'+esc(c.name||'Anonymous')+'</div><div class="comment-date">'+fmtD(c.timestamp)+'</div></div></div><div class="comment-text">'+esc(c.text)+'</div><div class="comment-hearts'+(il?' liked':'')+'" onclick="spToggleHeart(\''+id+'\','+(c.hearts||0)+','+il+')">♥ <span class="heart-count">'+(c.hearts||0)+'</span></div></div>';
+    }).join('');
+  }
+
+  window.spToggleHeart=function(id,cur,il){
+    var lk=getLiked(),nxt=il?Math.max(0,cur-1):cur+1; lk[id]=!il; setLiked(lk);
+    db.collection(COLL).doc(id).update({hearts:firebase.firestore.FieldValue.increment(il?-1:1)}).catch(function(e){console.error(e);});
+    var card=document.getElementById('cc_'+id);
+    if(card){ card.querySelector('.comment-hearts').className='comment-hearts'+(!il?' liked':''); card.querySelector('.heart-count').textContent=nxt; card.querySelector('.comment-hearts').setAttribute('onclick','spToggleHeart(\''+id+'\','+nxt+','+(!il)+')'); }
+  };
+
+  window.postComment=function(){
+    var ne=document.getElementById('commenterName'),te=document.getElementById('commentText');
+    var name=ne?ne.value.trim():'',text=te?te.value.trim():'';
+    if(!text){alert('Please write something!');return;}
+    if(!name)name='Anonymous';
+    var btn=document.querySelector('.post-btn'); if(btn){btn.disabled=true;btn.textContent='Posting…';}
+    db.collection(COLL).add({name:name,text:text,hearts:0,timestamp:firebase.firestore.FieldValue.serverTimestamp()})
+      .then(function(){ if(ne&&!document.querySelector('.comment-name-locked'))ne.value=''; if(te)te.value=''; if(btn){btn.disabled=false;btn.textContent='Post →';} })
+      .catch(function(){ alert('Post failed — check connection.'); if(btn){btn.disabled=false;btn.textContent='Post →';} });
+  };
+
+  var SEEDS=[
+    {name:'Noura · Year 3',text:'جزاك الله خيراً Eng. Ahmed! The DLD tutorials saved my exam 🙏',hearts:14},
+    {name:'Omar S.',text:'Every time I need past papers I end up here. Whoever built this — legend.',hearts:9},
+    {name:'Mariam · CPE Y2',text:'Signals & Systems folder is so well organized. Makes studying bearable!',hearts:7},
+  ];
+
+  var cfg={apiKey:"AIzaSyBUbq6wMEtMV81oGS8lVDup_Tq-E2FmeI4",authDomain:"linksforall-3d4d2.firebaseapp.com",projectId:"linksforall-3d4d2",storageBucket:"linksforall-3d4d2.firebasestorage.app",messagingSenderId:"74280124819",appId:"1:74280124819:web:6555dba201865ed2a2a866"};
+  if(!firebase.apps.length)firebase.initializeApp(cfg);
+  db=firebase.firestore();
+  window._fbDb=db; // expose globally
+
+  var w=document.getElementById('commentsWall');
+  if(w)w.innerHTML='<div class="no-comments"><span class="no-icon">⏳</span>Loading...</div>';
+
+  db.collection(COLL).orderBy('timestamp','desc').limit(60).onSnapshot(function(snap){
+    if(snap.empty){ var b=db.batch(); SEEDS.forEach(function(s){b.set(db.collection(COLL).doc(),Object.assign({},s,{timestamp:firebase.firestore.FieldValue.serverTimestamp()}))}); b.commit(); }
+    else renderComments(snap.docs);
+  },function(err){ console.error(err); if(w)w.innerHTML='<div class="no-comments"><span class="no-icon">⚠️</span>Comments unavailable.</div>'; });
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════
+   STUDY PLAN — Data, State, Render, PDF
+══════════════════════════════════════════════ */
+(function() {
+
+/* ─────────────────────────────────────────────
+   STUDY PLAN — fully rewritten
+   - Firebase progress storage (cross-device)
+   - Event delegation (no inline onclick URLs)
+   - Real-time onSnapshot sync
+───────────────────────────────────────────── */
+
+/* ── Wait for Firebase to be ready ── */
+function getDb() { return window._fbDb || firebase.firestore(); }
+
+/* ── Drive links ── */
+var DL = {
+  arabic_non_arab:'https://drive.google.com/drive/folders/1oRQ4JP2Vd1_o-8kfLaBjQF2Y0j4hBYOe',
+  physics1_lab:'https://drive.google.com/drive/folders/1JOSFuXAAGPCqc-6ESZyhunkIARk5xhf3',
+  physics1:'https://drive.google.com/drive/folders/1Qapw0WLk8gd8ob8HwYSAJomFGxEnQHiT',
+  calculus1:'https://drive.google.com/drive/folders/1783MZqOhoKN5P7hm9L2d5bbzc2YdoXD',
+  gen_chem:'https://drive.google.com/drive/folders/1uAr2mrvwejtJbdnbcEo_zWE4NNG5sm1G',
+  gen_chem_lab:'https://drive.google.com/drive/folders/16rrqz5WTQTCnrrYubb3q8_44mlAg5fnW',
+  english:'https://drive.google.com/drive/folders/1wLdtVHsuSG-i_iF43q521Pb88oyM2hqM',
+  islamic:'https://drive.google.com/drive/folders/1SbtbGQugTGABRdTiAgsCLDsrUQpqCa8J',
+  physics2_lab:'https://drive.google.com/drive/folders/1JVfW4tAJbBw59CEGetBFmMXFOSb8yOO5',
+  physics2:'https://drive.google.com/drive/folders/1oP5fmwahpm4Qw0dc7AsJMbG6c2GIuKS1',
+  intro_cpe:'https://drive.google.com/drive/folders/1BJE9EPmkgqWelz1OpadiPgjpiL8c9O6O',
+  calculus2:'https://drive.google.com/drive/folders/1DXzPgDV_VbKKzZJleRgn2om8BJ2yrifG',
+  prog1:'https://drive.google.com/drive/folders/1xmUGq5uUJj4_FRsvzXQ2u0FgQG_tHUpP',
+  intro_it:'https://drive.google.com/drive/folders/1yFnzvBvz8kbXIBKdTiiKGGuukK1nji9S',
+  circuit1_lab:'https://drive.google.com/drive/folders/1x0IM7uBSsiPfI5UxNY7GhAAs-jW8n_lH',
+  circuit1:'https://drive.google.com/drive/folders/1t3tkFS-p-8DZx9NYRXzQO63xOllsrhpG',
+  prog2:'https://drive.google.com/drive/folders/1YFNdf7IkiyTGVmOXS2FjVi-f1bmxVpem',
+  diff_eq:'https://drive.google.com/drive/folders/1E-9fJsbkRPiL-eEUAodmE4UMdpCtnNv7',
+  dld:'https://drive.google.com/drive/folders/1DBwDhMOOBr6Mq2ME5048aHuh4sjJ05wI',
+  discrete:'https://drive.google.com/drive/folders/105IWSNacp5HLt6em1SGboIMoyXfcFbZD',
+  rand_sig:'https://drive.google.com/drive/folders/1CY-hiiPre19OTW1ICelSmCUo1hg8NKdz',
+  signals:'https://drive.google.com/drive/folders/1jPRNeuack64o2pSxNoA-Yo8cdYz4ftyY',
+  fund_elec:'https://drive.google.com/drive/folders/1FLJSJFhOXRFCDA837a0vqC4b3jSpPuQY',
+  dld_lab:'https://drive.google.com/drive/folders/12fctVgzxVVg8b2zWRhhdWpq8UaROrn2x',
+  micros:'https://drive.google.com/drive/folders/1kQ_0CsfTQd4oDyY0RydJRBqDXCKJ3B3y',
+  data_struct:'https://drive.google.com/drive/folders/1t7hJ2XK6lkWu2PKmHwKtSUKYUDz_dpqJ',
+  fund_elec_lab:'https://drive.google.com/drive/folders/1Flrd-ikBxknf4pWkbXtNIR4udaMZc90S',
+  telecom:'https://drive.google.com/drive/folders/1SYDcCVfXmEcAbr9_lo8oJRxYzSwFdNKF',
+  comp_comm:'https://drive.google.com/drive/folders/1ufrQgcrmuRKHwrDLX_Td4wEtulMjYhFH',
+  lin_alg:'https://drive.google.com/drive/folders/1XBfWtzwVKl9LQTNSV5pRCrgzi9XPet_X',
+  os:'https://drive.google.com/drive/folders/1KPxMJFTA11KSAAOlx3hUBbG7P9V7zGM4',
+  net_sec:'https://drive.google.com/drive/folders/1wcXkqd0SgSb8FRaRtzxxxhAcywWQbhuj',
+  embedded:'https://drive.google.com/drive/folders/1tuhCKIImEmIHlVwTZRFG652qftwXYW1k',
+  sw_eng:'https://drive.google.com/drive/folders/1UqIX2SU7EgOKAAEpp0_zaUzNF05ObQur',
+  tech_wr:'https://drive.google.com/drive/folders/1tLk4qj94S7IZLsZxE-MAV2Cc4SreTMuN',
+  innov:'https://drive.google.com/drive/folders/1CRittODGWsN6KLj26AXCS5Vd4sZ1PepA',
+  eng_econ:'https://drive.google.com/drive/folders/1X0yLaGjIciuF0RS4j8VfPGHg4lKZrNIe'
+};
+var VL = {
+  discrete:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgC0CY77wGqbRp-HQTFwekMVAbHlnd34wKAJz2zIhiGqhdE?e=4sn16C',
+  comp_comm:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgDYkCaShZmmR6zXvW_BnRKYARYSL-t6ch15zL1YHD2Q8cw?e=HN5IU3',
+  fund_elec:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgCIYfhndRcyQ7pMc9sX0Y-_ARUKgsPUoMc3bc7H0JKsdMQ?e=bvkKja',
+  micros:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgBj1INwEAlNSIUlanybgNGtARA0_gKcPw3EjT3J9V91-BY?e=9lgh7F',
+  os:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgAQf_l728BFRrs67DGKRIZiAaRFfshdy8kyLZ-SPdtBsts?e=fQtLU1',
+  signals:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgAzDQsh6UA5RrFyyLMIZ-clAb0_WlaQ-ub4ZScLZpQOdfE?e=gNC0Cu',
+  dld:'https://uoshj-my.sharepoint.com/:f:/g/personal/u22200482_sharjah_ac_ae/IgDeb-D9kmZsRaDDVgiHMagUAVQ7sOCGlBOoSDTrW14cbBk?e=neQaoD'
+};
+function D(k){return DL[k]||null;} function V(k){return VL[k]||null;}
+
+/* ── Course data — Fall 2022 ── */
+var FALL2022 = [
+  {id:'f22s1',num:'S1',label:'Semester 1',lv:'freshman',lvLabel:'First Level — Freshman',chr:17,courses:[
+    {id:'f1c1',code:'0201102',name:'Arabic Language',chr:3,cat:'general',e:'🗣️',note:'Or 0201105 for Non-Arabs',d:D('arabic_non_arab')},
+    {id:'f1c2',code:'1430116',name:'Physics I Lab',chr:1,cat:'physics',e:'🔬',d:D('physics1_lab')},
+    {id:'f1c3',code:'1430115',name:'Physics I',chr:3,cat:'physics',e:'⚛️',d:D('physics1')},
+    {id:'f1c4',code:'1440133',name:'Calculus I for Engineers',chr:3,cat:'math',e:'➕',d:D('calculus1')},
+    {id:'f1c5',code:'1420101',name:'General Chemistry',chr:3,cat:'general',e:'⚗️',d:D('gen_chem')},
+    {id:'f1c6',code:'1420102',name:'General Chemistry Lab',chr:1,cat:'general',e:'🧪',d:D('gen_chem_lab')},
+    {id:'f1c7',code:'0202112',name:'English for Academic Purposes',chr:3,cat:'general',e:'📝',d:D('english')}
+  ]},
+  {id:'f22s2',num:'S2',label:'Semester 2',lv:'freshman',lvLabel:'First Level — Freshman',chr:17,courses:[
+    {id:'f2c1',code:'1430118',name:'Physics II Lab',chr:1,cat:'physics',e:'🔬',d:D('physics2_lab')},
+    {id:'f2c2',code:'1430117',name:'Physics II',chr:3,cat:'physics',e:'🌊',d:D('physics2')},
+    {id:'f2c3',code:'1502101',name:'Intro. to CPE',chr:3,cat:'engineering',e:'🧭',d:D('intro_cpe')},
+    {id:'f2c4',code:'1440161',name:'Calculus II for Engineers',chr:3,cat:'math',e:'➗',d:D('calculus2')},
+    {id:'f2c5',code:'1501116',name:'Programming I',chr:4,cat:'programming',e:'💾',d:D('prog1')},
+    {id:'f2c6',code:'1501100',name:'Intro to IT',chr:3,cat:'general',e:'💼',d:D('intro_it')}
+  ]},
+  {id:'f22s3',num:'S3',label:'Semester 3',lv:'sophomore',lvLabel:'Second Level — Sophomore',chr:16,courses:[
+    {id:'f3c1',code:'0402203',name:'Circuit Analysis I Lab',chr:1,cat:'circuits',e:'🧪',d:D('circuit1_lab')},
+    {id:'f3c2',code:'0402202',name:'Circuit Analysis I',chr:3,cat:'circuits',e:'🔋',t:true,d:D('circuit1')},
+    {id:'f3c3',code:'1501211',name:'Programming II',chr:3,cat:'programming',e:'👨‍💻',d:D('prog2')},
+    {id:'f3c4',code:'1440261',name:'Diff. Equations for Engineers',chr:3,cat:'math',e:'📉',d:D('diff_eq')},
+    {id:'f3c5',code:'1502201',name:'Digital Logic Design',chr:3,cat:'engineering',e:'💻',t:true,d:D('dld'),v:V('dld')},
+    {id:'f3c6',code:'1502111',name:'Discrete Math for Engineers',chr:3,cat:'math',e:'🧮',d:D('discrete'),v:V('discrete')}
+  ]},
+  {id:'f22s4',num:'S4',label:'Semester 4',lv:'sophomore',lvLabel:'Second Level — Sophomore',chr:18,courses:[
+    {id:'f4c1',code:'0402241',name:'Random Signal Theory',chr:3,cat:'signals',e:'🎲',t:true,d:D('rand_sig')},
+    {id:'f4c2',code:'0402240',name:'Signals & Systems',chr:3,cat:'signals',e:'📶',t:true,d:D('signals'),v:V('signals')},
+    {id:'f4c3',code:'0402250',name:'Fund. of Electronic Circuits',chr:3,cat:'circuits',e:'⚡',d:D('fund_elec'),v:V('fund_elec')},
+    {id:'f4c4',code:'1502202',name:'Digital Logic Design Lab',chr:1,cat:'engineering',e:'💡',d:D('dld_lab')},
+    {id:'f4c5',code:'1502232',name:'Microprocessors & Assembly Language',chr:4,cat:'engineering',e:'⚙️',d:D('micros'),v:V('micros')},
+    {id:'f4c6',code:'1501215',name:'Data Structures',chr:3,cat:'programming',e:'🧠',d:D('data_struct')},
+    {id:'f4c7',code:'0402251',name:'Fund. of Elec. Circuits Lab',chr:1,cat:'circuits',e:'🔌',d:D('fund_elec_lab')}
+  ]},
+  {id:'f22s5',num:'S5',label:'Semester 5',lv:'junior',lvLabel:'Third Level — Junior',chr:15,courses:[
+    {id:'f5c1',code:'0402346',name:'Telecommunication Systems I',chr:3,cat:'comms',e:'🛰️',d:D('telecom')},
+    {id:'f5c2',code:'1502346',name:'Comp. Comm. & Networks',chr:3,cat:'comms',e:'📡',d:D('comp_comm'),v:V('comp_comm')},
+    {id:'f5c3',code:'0402340',name:'Eng. Comp. & Linear Algebra',chr:3,cat:'math',e:'📐',d:D('lin_alg')},
+    {id:'f5c4',code:'1502326',name:'Computer System Architecture',chr:3,cat:'systems',e:'🏗️'},
+    {id:'f5c5',code:'1501352',name:'Operating Systems',chr:3,cat:'systems',e:'🖥️',d:D('os'),v:V('os')}
+  ]},
+  {id:'f22s6',num:'S6',label:'Semester 6',lv:'junior',lvLabel:'Third Level — Junior',chr:17,courses:[
+    {id:'f6c1',code:'0402347',name:'Telecommunication Systems I Lab',chr:1,cat:'comms',e:'🛰️'},
+    {id:'f6c2',code:'1502347',name:'Comp. Comm. & Net. Lab',chr:1,cat:'comms',e:'📡'},
+    {id:'f6c3',code:'1502444',name:'Computer and Network Security',chr:3,cat:'systems',e:'🔐',d:D('net_sec')},
+    {id:'f6c4',code:'1502334',name:'Embedded Systems Design',chr:3,cat:'engineering',e:'🤖',d:D('embedded')},
+    {id:'f6c5',code:'1501366',name:'Software Engineering',chr:3,cat:'programming',e:'🛠️',d:D('sw_eng')},
+    {id:'f6c6',code:'0202207',name:'Technical Writing',chr:3,cat:'general',e:'✍️',d:D('tech_wr')},
+    {id:'f6c7',code:'0302200',name:'Fundamentals of Innovation',chr:3,cat:'general',e:'🚀',d:D('innov')}
+  ]},
+  {id:'f22su',num:'☀',label:'Summer',lv:'summer',lvLabel:'Summer Training',chr:0,courses:[
+    {id:'fsuc1',code:'1502490',name:'Practical Training — 6 to 8 weeks',chr:0,cat:'project',e:'🏭',note:'Internship — 0 CHr'}
+  ]},
+  {id:'f22s7',num:'S7',label:'Semester 7',lv:'senior',lvLabel:'Fourth Level — Senior',chr:16,courses:[
+    {id:'f7c1',code:'1502442',name:'Network Programming',chr:3,cat:'comms',e:'🌐'},
+    {id:'f7c2',code:'040XXXX',name:'Department Elective 1',chr:3,cat:'elective',e:'📌'},
+    {id:'f7c3',code:'0401301',name:'Engineering Economics',chr:3,cat:'general',e:'💰',d:D('eng_econ')},
+    {id:'f7c4',code:'0104100',name:'Islamic Culture',chr:3,cat:'general',e:'🕌',d:D('islamic')},
+    {id:'f7c5',code:'XXXXXXX',name:'University Elective 1',chr:3,cat:'elective',e:'🎯'},
+    {id:'f7c6',code:'1502491',name:'Senior Design Project I',chr:1,cat:'project',e:'🏆'}
+  ]},
+  {id:'f22s8',num:'S8',label:'Semester 8',lv:'senior',lvLabel:'Fourth Level — Senior',chr:16,courses:[
+    {id:'f8c1',code:'1502300',name:'Prof., Soc. & Ethical Issues',chr:1,cat:'general',e:'🤝'},
+    {id:'f8c2',code:'040XXXX',name:'Department Elective 2',chr:3,cat:'elective',e:'📌'},
+    {id:'f8c3',code:'040XXXX',name:'Department Elective 3',chr:3,cat:'elective',e:'📌'},
+    {id:'f8c4',code:'0204102',name:'UAE Society',chr:3,cat:'general',e:'🇦🇪'},
+    {id:'f8c5',code:'XXXXXXX',name:'University Elective 2',chr:3,cat:'elective',e:'🎯'},
+    {id:'f8c6',code:'1502492',name:'Senior Design Project II',chr:3,cat:'project',e:'🏆'}
+  ]}
+];
+
+/* ── Course data — Fall 2023 (Spring 2023-2024) ── */
+var FALL2023 = [
+  {id:'g23s1',num:'S1',label:'Semester 1',lv:'freshman',lvLabel:'First Level — Freshman',chr:16,courses:[
+    {id:'g1c1',code:'0201102',name:'Arabic Language',chr:3,cat:'general',e:'🗣️',note:'Or 0201105',d:D('arabic_non_arab')},
+    {id:'g1c2',code:'1430116',name:'Physics I Lab',chr:1,cat:'physics',e:'🔬',d:D('physics1_lab')},
+    {id:'g1c3',code:'1430115',name:'Physics I',chr:3,cat:'physics',e:'⚛️',d:D('physics1')},
+    {id:'g1c4',code:'1440133',name:'Calculus I for Engineers',chr:3,cat:'math',e:'➕',d:D('calculus1')},
+    {id:'g1c5',code:'0104100',name:'Islamic Culture',chr:3,cat:'general',e:'🕌',isNew:true,note:'Moved to Sem 1',d:D('islamic')},
+    {id:'g1c6',code:'0202112',name:'English for Academic Purposes',chr:3,cat:'general',e:'📝',d:D('english')}
+  ]},
+  {id:'g23s2',num:'S2',label:'Semester 2',lv:'freshman',lvLabel:'First Level — Freshman',chr:17,courses:[
+    {id:'g2c1',code:'1430118',name:'Physics II Lab',chr:1,cat:'physics',e:'🔬',d:D('physics2_lab')},
+    {id:'g2c2',code:'1430117',name:'Physics II',chr:3,cat:'physics',e:'🌊',d:D('physics2')},
+    {id:'g2c3',code:'1502101',name:'Intro. to CPE',chr:3,cat:'engineering',e:'🧭',d:D('intro_cpe')},
+    {id:'g2c4',code:'1440161',name:'Calculus II for Engineers',chr:3,cat:'math',e:'➗',d:D('calculus2')},
+    {id:'g2c5',code:'1501116',name:'Programming I',chr:4,cat:'programming',e:'💾',d:D('prog1')},
+    {id:'g2c6',code:'1501100',name:'Intro to IT',chr:3,cat:'general',e:'💼',d:D('intro_it')}
+  ]},
+  {id:'g23s3',num:'S3',label:'Semester 3',lv:'sophomore',lvLabel:'Second Level — Sophomore',chr:16,courses:[
+    {id:'g3c1',code:'0402203',name:'Circuit Analysis I Lab',chr:1,cat:'circuits',e:'🧪',d:D('circuit1_lab')},
+    {id:'g3c2',code:'0402202',name:'Circuit Analysis I',chr:3,cat:'circuits',e:'🔋',t:true,d:D('circuit1')},
+    {id:'g3c3',code:'1501211',name:'Programming II',chr:3,cat:'programming',e:'👨‍💻',d:D('prog2')},
+    {id:'g3c4',code:'1440261',name:'Diff. Equations for Engineers',chr:3,cat:'math',e:'📉',d:D('diff_eq')},
+    {id:'g3c5',code:'1502201',name:'Digital Logic Design',chr:3,cat:'engineering',e:'💻',t:true,note:'Pre/Co: 2nd Year Standing',d:D('dld'),v:V('dld')},
+    {id:'g3c6',code:'1502111',name:'Discrete Math for Engineers',chr:3,cat:'math',e:'🧮',d:D('discrete'),v:V('discrete')}
+  ]},
+  {id:'g23s4',num:'S4',label:'Semester 4',lv:'sophomore',lvLabel:'Second Level — Sophomore',chr:18,courses:[
+    {id:'g4c1',code:'0402241',name:'Random Signal Theory',chr:3,cat:'signals',e:'🎲',t:true,d:D('rand_sig')},
+    {id:'g4c2',code:'0402240',name:'Signals & Systems',chr:3,cat:'signals',e:'📶',t:true,d:D('signals'),v:V('signals')},
+    {id:'g4c3',code:'0402250',name:'Fund. of Electronic Circuits',chr:3,cat:'circuits',e:'⚡',d:D('fund_elec'),v:V('fund_elec')},
+    {id:'g4c4',code:'1502202',name:'Digital Logic Design Lab',chr:1,cat:'engineering',e:'💡',d:D('dld_lab')},
+    {id:'g4c5',code:'1502232',name:'Microprocessors & Assembly Language',chr:4,cat:'engineering',e:'⚙️',d:D('micros'),v:V('micros')},
+    {id:'g4c6',code:'1501215',name:'Data Structures',chr:3,cat:'programming',e:'🧠',d:D('data_struct')},
+    {id:'g4c7',code:'0402251',name:'Fund. of Elec. Circuits Lab',chr:1,cat:'circuits',e:'🔌',d:D('fund_elec_lab')}
+  ]},
+  {id:'g23s5',num:'S5',label:'Semester 5',lv:'junior',lvLabel:'Third Level — Junior',chr:15,courses:[
+    {id:'g5c1',code:'0402346',name:'Telecommunication Systems I',chr:3,cat:'comms',e:'🛰️',d:D('telecom')},
+    {id:'g5c2',code:'1502346',name:'Comp. Comm. & Networks',chr:3,cat:'comms',e:'📡',d:D('comp_comm'),v:V('comp_comm')},
+    {id:'g5c3',code:'0402340',name:'Eng. Comp. & Linear Algebra',chr:3,cat:'math',e:'📐',d:D('lin_alg')},
+    {id:'g5c4',code:'1502326',name:'Computer System Architecture',chr:3,cat:'systems',e:'🏗️'},
+    {id:'g5c5',code:'1501352',name:'Operating Systems',chr:3,cat:'systems',e:'🖥️',d:D('os'),v:V('os')}
+  ]},
+  {id:'g23s6',num:'S6',label:'Semester 6',lv:'junior',lvLabel:'Third Level — Junior',chr:17,courses:[
+    {id:'g6c1',code:'0402347',name:'Telecommunication Systems I Lab',chr:1,cat:'comms',e:'🛰️'},
+    {id:'g6c2',code:'1502347',name:'Comp. Comm. & Net. Lab',chr:1,cat:'comms',e:'📡'},
+    {id:'g6c3',code:'1502444',name:'Computer and Network Security',chr:3,cat:'systems',e:'🔐',d:D('net_sec')},
+    {id:'g6c4',code:'1502334',name:'Embedded Systems Design',chr:3,cat:'engineering',e:'🤖',d:D('embedded')},
+    {id:'g6c5',code:'1502420',name:'Advanced Digital Logic Design',chr:3,cat:'engineering',e:'🔮',isNew:true},
+    {id:'g6c6',code:'0202207',name:'Technical Writing',chr:3,cat:'general',e:'✍️',d:D('tech_wr')},
+    {id:'g6c7',code:'0302200',name:'Fundamentals of Innovation',chr:3,cat:'general',e:'🚀',d:D('innov')}
+  ]},
+  {id:'g23s7',num:'S7',label:'Semester 7',lv:'senior',lvLabel:'Fourth Level — Senior',chr:14,courses:[
+    {id:'g7c1',code:'1502XXX',name:'Department Elective 1',chr:3,cat:'elective',e:'📌'},
+    {id:'g7c2',code:'1502410',name:'Artificial Intelligence for Eng.',chr:3,cat:'systems',e:'🤖',isNew:true},
+    {id:'g7c3',code:'1420101',name:'General Chemistry',chr:3,cat:'general',e:'⚗️',isNew:true,note:'Moved to Senior',d:D('gen_chem')},
+    {id:'g7c4',code:'1420102',name:'General Chemistry Lab',chr:1,cat:'general',e:'🧪',isNew:true,d:D('gen_chem_lab')},
+    {id:'g7c5',code:'XXXXXXX',name:'University Elective 1',chr:3,cat:'elective',e:'🎯'},
+    {id:'g7c6',code:'1502491',name:'Senior Design Project I',chr:1,cat:'project',e:'🏆'}
+  ]},
+  {id:'g23s8',num:'S8',label:'Semester 8',lv:'senior',lvLabel:'Fourth Level — Senior',chr:16,courses:[
+    {id:'g8c1',code:'1502300',name:'Prof., Soc. & Ethical Issues',chr:1,cat:'general',e:'🤝'},
+    {id:'g8c2',code:'1502XXX',name:'Department Elective 2',chr:3,cat:'elective',e:'📌'},
+    {id:'g8c3',code:'1502XXX',name:'Department Elective 3',chr:3,cat:'elective',e:'📌'},
+    {id:'g8c4',code:'0204102',name:'UAE Society',chr:3,cat:'general',e:'🇦🇪'},
+    {id:'g8c5',code:'XXXXXXX',name:'University Elective 2',chr:3,cat:'elective',e:'🎯'},
+    {id:'g8c6',code:'1502492',name:'Senior Design Project II',chr:3,cat:'project',e:'🏆'}
+  ]},
+  {id:'g23pt',num:'☀',label:'Practical Training',lv:'summer',lvLabel:'Fifth Level — Senior',chr:3,courses:[
+    {id:'gptc1',code:'1502497',name:'Practical Training — 16 weeks',chr:3,cat:'project',e:'🏭',isNew:true,note:'3 CHr — extended to 16 weeks'}
+  ]}
+];
+
+var PLANS = {fall2022:FALL2022, fall2023:FALL2023};
+var LVC = {
+  freshman: {cc:'#38bdf8',bg:'rgba(56,189,248,.12)',fill:'#38bdf8'},
+  sophomore:{cc:'#a78bfa',bg:'rgba(167,139,250,.12)',fill:'#a78bfa'},
+  junior:   {cc:'#34d399',bg:'rgba(52,211,153,.12)', fill:'#34d399'},
+  senior:   {cc:'#f43f5e',bg:'rgba(244,63,94,.1)',   fill:'#f43f5e'},
+  summer:   {cc:'#fbbf24',bg:'rgba(251,191,36,.12)', fill:'#fbbf24'}
+};
+var CATCC = {math:'#f59e0b',physics:'#38bdf8',programming:'#a78bfa',circuits:'#34d399',signals:'#fb923c',comms:'#22d3ee',systems:'#818cf8',engineering:'#6366f1',general:'#94a3b8',project:'#f43f5e',elective:'#c084fc'};
+var CFCOL = ['#6c63ff','#38bdf8','#34d399','#fbbf24','#f43f5e','#a78bfa'];
+
+/* ── State ── */
+var spId = '', spPlan = 'fall2022', spDone = {}, spLv = 'all', spUnsub = null;
+var SP_COLL = 'student_progress';
+
+function curSems()   { return PLANS[spPlan] || FALL2022; }
+function totalC()    { return curSems().reduce(function(a,s){return a+s.courses.length;},0); }
+function totalChr()  { return curSems().reduce(function(a,s){return a+s.chr;},0); }
+function spDocId()   { return spId + '_' + spPlan; } // e.g. "U22200482_fall2022"
+function spLocalKey(){ return 'sp-done-' + spDocId(); }
+
+/* ── Local progress cache (always-available fallback) ── */
+function spLoadLocalDone() {
+  try { return JSON.parse(localStorage.getItem(spLocalKey()) || '{}'); }
+  catch (e) { return {}; }
+}
+function spSaveLocalDone() {
+  try { localStorage.setItem(spLocalKey(), JSON.stringify(spDone)); } catch (e) {}
+}
+
+/* ── Sync status pill ── */
+var spStatusTimer = null;
+function spSetStatus(kind, text) {
+  var el = document.getElementById('spSyncStatus');
+  if (!el) return;
+  el.className = 'sp-sync-status' + (kind ? ' ' + kind : '');
+  el.textContent = text || '';
+  if (spStatusTimer) { clearTimeout(spStatusTimer); spStatusTimer = null; }
+  if (kind === 'saved') {
+    spStatusTimer = setTimeout(function() { el.className = 'sp-sync-status'; el.textContent = ''; }, 2000);
+  }
+}
+
+/* ── Firebase save ── */
+var spSaveRetryTimer = null;
+function spSaveFirebase() {
+  spSaveLocalDone(); /* always keep this device's copy up to date first, regardless of cloud outcome */
+  if (!spId) return;
+  spSetStatus('saving', 'Saving…');
+  getDb().collection(SP_COLL).doc(spDocId()).set({
+    studentId: spId,
+    plan: spPlan,
+    done: spDone,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, {merge: true}).then(function() {
+    spSetStatus('saved', '✓ Saved');
+  }).catch(function(e) {
+    console.error('SP save error:', e);
+    if (e && e.code === 'permission-denied') {
+      spSetStatus('error', '⚠ Saved on this device only — Firestore rules are blocking cloud sync');
+    } else {
+      spSetStatus('error', '⚠ Saved on this device — retrying cloud sync…');
+      if (spSaveRetryTimer) clearTimeout(spSaveRetryTimer);
+      spSaveRetryTimer = setTimeout(spSaveFirebase, 4000); /* auto-retry once network/rules issue clears */
+    }
+  });
+}
+
+/* ── Apply progress to the UI ── */
+function spApplyDoneToUI() {
+  curSems().forEach(function(s) {
+    s.courses.forEach(function(c) {
+      var el = document.getElementById('spc-' + c.id);
+      if (el) el.classList.toggle('done', !!spDone[c.id]);
+    });
+  });
+  spUpdateStats();
+}
+
+/* ── Real-time listener — syncs across devices, never wipes local progress ── */
+function spStartListener() {
+  if (spUnsub) { spUnsub(); spUnsub = null; }
+  var sawFirstSnapshot = false;
+  spUnsub = getDb().collection(SP_COLL).doc(spDocId())
+    .onSnapshot(function(doc) {
+      if (doc.exists) {
+        /* Cloud has data — it's the source of truth across devices */
+        spDone = doc.data().done || {};
+        spSaveLocalDone();
+        spApplyDoneToUI();
+      } else if (!sawFirstSnapshot) {
+        /* No cloud doc yet. Don't erase what's already marked on this device —
+           instead push the local copy up so the cloud catches up. */
+        var local = spLoadLocalDone();
+        if (Object.keys(local).length) {
+          spDone = local;
+          spApplyDoneToUI();
+          spSaveFirebase();
+        }
+      }
+      sawFirstSnapshot = true;
+    }, function(err) {
+      console.error('SP listener error:', err);
+      /* Cloud unreachable/blocked — fall back to whatever is saved locally so progress still shows */
+      spDone = spLoadLocalDone();
+      spApplyDoneToUI();
+      if (err && err.code === 'permission-denied') {
+        spSetStatus('error', '⚠ Using this device\'s saved progress — Firestore rules are blocking cloud sync');
+      } else {
+        spSetStatus('error', '⚠ Using this device\'s saved progress — cloud sync unavailable');
+      }
+    });
+}
+
+/* ── Confetti ── */
+function spConfetti(x, y) {
+  for (var i = 0; i < 18; i++) {
+    var el = document.createElement('div');
+    el.className = 'sp-cf';
+    el.style.cssText = 'left:' + (x + (Math.random()-.5)*90) + 'px;top:' + (y-10) + 'px;background:' + CFCOL[Math.floor(Math.random()*CFCOL.length)] + ';animation-duration:' + (.5+Math.random()*.6) + 's;animation-delay:' + (Math.random()*.15) + 's';
+    document.body.appendChild(el);
+    setTimeout((function(e){return function(){e.remove();};})(el), 1300);
+  }
+}
+
+/* ── Update stats + journey dots ── */
+function spUpdateStats() {
+  var n = 0, chrD = 0, sems = curSems();
+  sems.forEach(function(s) { s.courses.forEach(function(c) { if (spDone[c.id]) { n++; chrD += c.chr; } }); });
+  var tot = totalC(), totChr = totalChr(), pct = tot > 0 ? Math.round(n/tot*100) : 0;
+  document.getElementById('spDone').textContent    = n;
+  document.getElementById('spTotal').textContent   = tot;
+  document.getElementById('spChrDone').textContent = chrD;
+  document.getElementById('spChrTotal').textContent= totChr;
+  document.getElementById('spPct').textContent     = pct + '%';
+  document.getElementById('spPFill').style.width   = pct + '%';
+  document.getElementById('spPctLbl').textContent  = pct + '%';
+  document.getElementById('spDoneBanner').style.display = (n === tot && tot > 0) ? 'block' : 'none';
+
+  sems.forEach(function(s, i) {
+    var dot  = document.getElementById('sjd-' + s.id);
+    var line = i > 0 ? document.getElementById('sjl-' + s.id) : null;
+    if (!dot) return;
+    var allD = s.courses.every(function(c){return !!spDone[c.id];});
+    var anyD = s.courses.some(function(c){return !!spDone[c.id];});
+    dot.classList.toggle('done',  allD);
+    dot.classList.toggle('active', anyD && !allD);
+    if (line) line.classList.toggle('done', allD);
+    var fill = document.getElementById('smf-' + s.id), txt = document.getElementById('smt-' + s.id);
+    if (fill && txt) {
+      var nd = s.courses.filter(function(c){return !!spDone[c.id];}).length;
+      fill.style.width = (s.courses.length > 0 ? nd/s.courses.length*100 : 0) + '%';
+      txt.textContent  = nd + '/' + s.courses.length;
+    }
+  });
+}
+
+/* ── Render journey ── */
+function spRenderJourney() {
+  var h = '', sems = curSems();
+  sems.forEach(function(s, i) {
+    var lc = LVC[s.lv] || LVC.freshman;
+    if (i > 0) h += '<div class="sp-jline" id="sjl-' + s.id + '"></div>';
+    h += '<div class="sp-jnode"><div class="sp-jdot" id="sjd-' + s.id + '" style="color:' + lc.cc + '">' + s.num + '</div><div class="sp-jlabel">' + s.label + '</div></div>';
+  });
+  document.getElementById('spJourney').innerHTML = h;
+}
+
+/* ── Render semesters ── */
+function spRenderSems() {
+  var h = '', sems = curSems();
+  sems.forEach(function(s) {
+    var lc  = LVC[s.lv] || LVC.freshman;
+    var vis = spLv === 'all' || spLv === s.lv;
+    h += '<div class="sp-sem' + (vis ? '' : ' hidden') + '" id="spSec-' + s.id + '">';
+    h += '<div class="sp-sem-head">';
+    h += '<div class="sp-sem-badge" style="background:' + lc.bg + ';color:' + lc.cc + '">' + s.num + '</div>';
+    h += '<div class="sp-sem-info">';
+    h += '<div class="sp-sem-name">' + s.label + ' <span style="font-size:11px;font-weight:400;color:var(--muted)">— ' + s.lvLabel + '</span></div>';
+    h += '<div class="sp-sem-sub">' + (s.chr > 0 ? '📚 ' + s.chr + ' CHr' : '🏭 Practical') + ' &nbsp;·&nbsp; ' + s.courses.length + ' course' + (s.courses.length !== 1 ? 's' : '') + '</div>';
+    h += '</div>';
+    h += '<div class="sp-sem-mini"><div class="sp-mini-track"><div class="sp-mini-fill" id="smf-' + s.id + '" style="width:0%;background:' + lc.fill + '"></div></div><div class="sp-mini-txt" id="smt-' + s.id + '">0/' + s.courses.length + '</div></div>';
+    h += '</div>';
+    h += '<div class="sp-grid">';
+    s.courses.forEach(function(c) {
+      var isDone = spDone[c.id] ? ' done' : '';
+      var cc = CATCC[c.cat] || '#6c63ff';
+      /* Use data attributes — NO inline URL in onclick */
+      h += '<div class="sp-ccard' + isDone + '" id="spc-' + c.id + '" data-cid="' + c.id + '" style="--sp-cc:' + cc + '">';
+      h += '<div class="sp-check">✓</div>';
+      h += '<div class="sp-print-check">✓</div>';
+      h += '<div class="sp-ctop"><div class="sp-cemoji">' + c.e + '</div>';
+      h += '<div class="sp-ctitles"><div class="sp-cname">' + c.name + '</div><div class="sp-ccode">' + c.code + '</div></div></div>';
+      h += '<div class="sp-cbadges">';
+      h += '<span class="sp-badge sp-chr">' + (c.chr > 0 ? c.chr + ' CHr' : 'P/F') + '</span>';
+      h += '<span class="sp-badge sp-b-' + c.cat + '">' + c.cat + '</span>';
+      if (c.t)     h += '<span class="sp-badge sp-tut">T</span>';
+      if (c.isNew) h += '<span class="sp-badge sp-new">NEW</span>';
+      if (c.note)  h += '<span style="font-size:8.5px;color:var(--muted);font-style:italic">* ' + c.note + '</span>';
+      h += '</div>';
+      /* Link buttons — store URL in data-sp-url, handled by event delegation */
+      if (c.d || c.v) {
+        h += '<div class="sp-clinks">';
+        if (c.d) h += '<button class="sp-link-btn sp-drive" data-sp-url="' + c.d + '">📁 Drive</button>';
+        if (c.v) h += '<button class="sp-link-btn sp-video" data-sp-url="' + c.v + '">🎬 Video</button>';
+        h += '</div>';
+      }
+      h += '</div>';
+    });
+    h += '</div></div>';
+  });
+  document.getElementById('spContainer').innerHTML = h;
+}
+
+/* ── Event delegation on container ── */
+document.getElementById('spContainer').addEventListener('click', function(e) {
+  /* Link button click — open URL without toggling card */
+  var linkBtn = e.target.closest('[data-sp-url]');
+  if (linkBtn) {
+    e.stopPropagation();
+    window.open(linkBtn.dataset.spUrl, '_blank', 'noopener');
+    return;
+  }
+  /* Card click — toggle done */
+  var card = e.target.closest('.sp-ccard[data-cid]');
+  if (card) {
+    var cid = card.dataset.cid;
+    spDone[cid] = !spDone[cid];
+    card.classList.toggle('done', spDone[cid]);
+    if (spDone[cid]) {
+      var r = card.getBoundingClientRect();
+      spConfetti(r.left + r.width/2, r.top + r.height/2);
+    }
+    spUpdateStats();
+    spSaveFirebase(); /* async save to Firebase */
+  }
+});
+
+/* ── Apply student session ── */
+function spApplySession(id, plan) {
+  spId = id; spPlan = plan || spPlan;
+  document.getElementById('spIdEntry').style.display = 'none';
+  document.getElementById('spMain').style.display    = '';
+  var ini = id.replace(/^U/, '').slice(0, 2);
+  document.getElementById('spAvatar').textContent  = ini;
+  document.getElementById('spBarId').textContent   = id;
+  var planLabel = spPlan === 'fall2022' ? 'Fall 2022 Plan' : 'Fall 2023 Plan';
+  document.getElementById('spBarPlan').textContent = planLabel;
+  var sub = document.getElementById('sp-print-subtitle');
+  if (sub) sub.textContent = id + ' · ' + planLabel;
+  spLv = 'all';
+  document.querySelectorAll('.sp-lvtab').forEach(function(b){b.classList.toggle('active', b.dataset.spv === 'all');});
+  spRenderJourney();
+  spRenderSems();
+  /* Show this device's saved progress immediately, don't wait on the network */
+  spDone = spLoadLocalDone();
+  spApplyDoneToUI();
+  /* Start Firebase listener — reconciles with cloud and keeps synced */
+  spStartListener();
+  /* Persist session locally so user doesn't have to re-enter */
+  localStorage.setItem('sp-student', id);
+  localStorage.setItem('sp-plan', spPlan);
+}
+
+/* ── ID Entry ── */
+var inp = document.getElementById('spIdInput');
+if (inp) {
+  inp.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+    this.classList.remove('err');
+    document.getElementById('spErrMsg').textContent = '';
+  });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('spStartBtn').click();
+  });
+}
+document.getElementById('spStartBtn').onclick = function() {
+  var digits = (inp ? inp.value : '').trim();
+  if (digits.length < 6 || digits.length > 8) {
+    if (inp) inp.classList.add('err');
+    document.getElementById('spErrMsg').textContent = 'Enter your 8-digit student number';
+    return;
+  }
+  var sel = document.querySelector('.sp-plan-opt.sel');
+  spApplySession('U' + digits, sel ? sel.dataset.plan : 'fall2022');
+};
+
+window.spPickPlan = function(el) {
+  document.querySelectorAll('.sp-plan-opt').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');
+};
+
+/* ── Bar actions ── */
+window.spSwitchPlan = function() {
+  var np = spPlan === 'fall2022' ? 'fall2023' : 'fall2022';
+  spPlan = np;
+  localStorage.setItem('sp-plan', np);
+  var planLabel = spPlan === 'fall2022' ? 'Fall 2022 Plan' : 'Fall 2023 Plan';
+  document.getElementById('spBarPlan').textContent = planLabel;
+  var sub = document.getElementById('sp-print-subtitle');
+  if (sub) sub.textContent = spId + ' · ' + planLabel;
+  spLv = 'all';
+  document.querySelectorAll('.sp-lvtab').forEach(function(b){b.classList.toggle('active', b.dataset.spv === 'all');});
+  spRenderJourney(); spRenderSems();
+  spStartListener(); /* reload Firebase data for new plan */
+};
+
+window.spLogout = function() {
+  if (!confirm('Log out of ' + spId + '? Progress is saved to Firebase.')) return;
+  if (spUnsub) { spUnsub(); spUnsub = null; }
+  spId = ''; spDone = {};
+  localStorage.removeItem('sp-student');
+  document.getElementById('spMain').style.display    = 'none';
+  document.getElementById('spIdEntry').style.display = '';
+  if (inp) inp.value = '';
+};
+
+window.spResetProgress = function() {
+  if (!confirm('Reset all progress for ' + spId + ' on the ' + spPlan + ' plan?\nThis deletes from Firebase too.')) return;
+  spDone = {};
+  spSaveFirebase();
+  document.querySelectorAll('.sp-ccard.done').forEach(function(el){el.classList.remove('done');});
+  spUpdateStats();
+};
+
+window.spDownloadPDF = function() {
+  if (!window.jspdf) { alert('PDF library not loaded yet — please wait a moment and try again.'); return; }
+
+  var jsPDF  = window.jspdf.jsPDF;
+  var doc    = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  var pw     = doc.internal.pageSize.getWidth();   // 210
+  var ph     = doc.internal.pageSize.getHeight();  // 297
+  var margin = 12;
+  var cw     = pw - margin * 2;  // usable width = 186
+
+  /* ── Stats ── */
+  var doneN = 0, doneC = 0;
+  curSems().forEach(function(s) {
+    s.courses.forEach(function(c) { if (spDone[c.id]) { doneN++; doneC += c.chr; } });
+  });
+  var totN   = totalC();
+  var totC   = totalChr();
+  var pct    = totN > 0 ? Math.round(doneN / totN * 100) : 0;
+  var planLbl = spPlan === 'fall2022' ? 'Fall 2022 Plan  (Spring 2022–23 curriculum)' : 'Fall 2023 Plan  (Spring 2023–24 curriculum)';
+
+  /* ── HEADER ── */
+  /* Deep purple gradient bar */
+  doc.setFillColor(68, 56, 202);
+  doc.rect(0, 0, pw, 38, 'F');
+  /* Lighter accent strip */
+  doc.setFillColor(99, 84, 255);
+  doc.rect(0, 32, pw, 6, 'F');
+
+  /* University name */
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.text('University of Sharjah', margin, 11);
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+  doc.text('College of Computing and Informatics  ·  Department of Computer Engineering', margin, 17);
+
+  /* Title */
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CPE Study Plan', margin, 26);
+
+  /* Student ID + plan (right-aligned) */
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+  var idLine = spId + '   ·   ' + planLbl;
+  doc.text(idLine, pw - margin, 11, { align: 'right' });
+
+  /* ── STATS STRIP ── */
+  doc.setFillColor(237, 235, 255);
+  doc.rect(0, 38, pw, 14, 'F');
+  doc.setTextColor(60, 50, 160);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  var statsStr = 'Courses Completed:  ' + doneN + ' / ' + totN +
+                 '     Credit Hours:  ' + doneC + ' / ' + totC +
+                 '     Progress:  ' + pct + '%';
+  doc.text(statsStr, pw / 2, 47, { align: 'center' });
+
+  /* Progress bar inside strip */
+  doc.setFillColor(210, 207, 255);
+  doc.roundedRect(margin, 49, cw, 2, 1, 1, 'F');
+  doc.setFillColor(99, 84, 255);
+  doc.roundedRect(margin, 49, cw * (pct / 100), 2, 1, 1, 'F');
+
+  /* ── LEGEND ── */
+  var ly = 56;
+  doc.setFillColor(248, 247, 255);
+  doc.rect(0, ly, pw, 10, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(80, 70, 160);
+  doc.text('LEGEND:', margin, ly + 7);
+  /* Done swatch */
+  doc.setFillColor(187, 247, 208);
+  doc.rect(margin + 20, ly + 3, 5, 5, 'F');
+  doc.setTextColor(50, 50, 50);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Completed (crossed out)', margin + 27, ly + 7);
+  /* Pending swatch */
+  doc.setFillColor(255, 255, 255);
+  doc.rect(margin + 82, ly + 3, 5, 5, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(margin + 82, ly + 3, 5, 5, 'S');
+  doc.text('Not yet completed', margin + 90, ly + 7);
+
+  /* ── SEMESTER SECTIONS ── */
+  var y = 70;
+
+  /* Level colour map */
+  var LV_COLORS = {
+    freshman:  { h:[56,189,248],  b:[219,245,255], t:[20,120,180]  },
+    sophomore: { h:[167,139,250], b:[240,235,255], t:[90,60,200]   },
+    junior:    { h:[52,211,153],  b:[220,255,240], t:[20,140,90]   },
+    senior:    { h:[244,63,94],   b:[255,225,230], t:[180,30,60]   },
+    summer:    { h:[251,191,36],  b:[255,248,210], t:[160,120,0]   }
+  };
+
+  curSems().forEach(function(s) {
+    var lc = LV_COLORS[s.lv] || LV_COLORS.freshman;
+    var rowsData = [];
+
+    s.courses.forEach(function(c) {
+      var isDone = !!spDone[c.id];
+      rowsData.push({
+        code: c.code,
+        name: c.name + (c.t ? '  [T]' : '') + (c.isNew ? '  ★' : ''),
+        chr:  c.chr > 0 ? c.chr + ' CHr' : 'P/F',
+        status: isDone ? '✓  Done' : '—',
+        done: isDone,
+        cat:  c.cat
+      });
+    });
+
+    /* Estimate height needed: sem header (8) + table rows (~7 each) + gap (6) */
+    var needed = 10 + rowsData.length * 7 + 8;
+    if (y + needed > ph - margin) {
+      doc.addPage();
+      y = margin;
+    }
+
+    /* Semester header bar */
+    doc.setFillColor(lc.h[0], lc.h[1], lc.h[2]);
+    doc.roundedRect(margin, y, cw, 8, 1.5, 1.5, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'bold');
+    var semTitle = s.label + '  —  ' + s.lvLabel;
+    var semRight = s.chr > 0 ? s.chr + ' CHr  ·  ' + s.courses.length + ' courses' : 'Practical Training';
+    doc.text(semTitle, margin + 3, y + 5.5);
+    doc.text(semRight, margin + cw - 3, y + 5.5, { align: 'right' });
+    y += 9;
+
+    /* Table */
+    doc.autoTable({
+      startY: y,
+      head: [['Course Code', 'Course Name', 'CHr', 'Status']],
+      body: rowsData.map(function(r) { return [r.code, r.name, r.chr, r.status]; }),
+      margin: { left: margin, right: margin },
+      tableWidth: cw,
+      styles: {
+        fontSize: 7.5,
+        cellPadding: { top: 2, bottom: 2, left: 2.5, right: 2.5 },
+        valign: 'middle',
+        overflow: 'linebreak'
+      },
+      headStyles: {
+        fillColor: [50, 40, 130],
+        textColor: [255, 255, 255],
+        fontSize: 7,
+        fontStyle: 'bold',
+        halign: 'left'
+      },
+      columnStyles: {
+        0: { cellWidth: 28, halign: 'left'   },
+        1: { cellWidth: 110 },
+        2: { cellWidth: 16, halign: 'center' },
+        3: { cellWidth: 28, halign: 'center' }
+      },
+      willDrawCell: function(data) {
+        if (data.section !== 'body') return;
+        var row = rowsData[data.row.index];
+        if (!row) return;
+        if (row.done) {
+          /* Green tint for completed rows */
+          data.cell.styles.fillColor  = [210, 248, 225];
+          data.cell.styles.textColor  = [60, 130, 80];
+        }
+      },
+      didDrawCell: function(data) {
+        if (data.section !== 'body') return;
+        var row = rowsData[data.row.index];
+        if (!row || !row.done) return;
+        /* Draw strikethrough line over the cell text */
+        var midY = data.cell.y + data.cell.height / 2 + 0.3;
+        doc.setDrawColor(80, 160, 100);
+        doc.setLineWidth(0.35);
+        doc.line(
+          data.cell.x + 1,
+          midY,
+          data.cell.x + data.cell.width - 1,
+          midY
+        );
+      },
+      theme: 'grid',
+      tableLineColor: [200, 195, 240],
+      tableLineWidth: 0.2
+    });
+
+    y = doc.lastAutoTable.finalY + 5;
+  });
+
+  /* ── FOOTER on last page ── */
+  var totalPages = doc.getNumberOfPages();
+  for (var pg = 1; pg <= totalPages; pg++) {
+    doc.setPage(pg);
+    doc.setFillColor(237, 235, 255);
+    doc.rect(0, ph - 10, pw, 10, 'F');
+    doc.setTextColor(100, 90, 180);
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.text(
+      'Generated by Course Hub  ·  ' + spId + '  ·  ' + planLbl + '  ·  Page ' + pg + ' of ' + totalPages,
+      pw / 2, ph - 3.5, { align: 'center' }
+    );
+  }
+
+  /* ── SAVE ── */
+  var filename = spId + '_' + (spPlan === 'fall2022' ? 'Fall2022' : 'Fall2023') + '_StudyPlan.pdf';
+  doc.save(filename);
+};
+
+/* ── Level filter ── */
+document.querySelectorAll('.sp-lvtab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.sp-lvtab').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    spLv = btn.dataset.spv;
+    curSems().forEach(function(s) {
+      var sec = document.getElementById('spSec-' + s.id);
+      if (sec) sec.classList.toggle('hidden', spLv !== 'all' && spLv !== s.lv);
+    });
+  });
+});
+
+/* ── Auto-restore session ── */
+var savedId   = localStorage.getItem('sp-student');
+var savedPlan = localStorage.getItem('sp-plan') || 'fall2022';
+if (savedId) {
+  spApplySession(savedId, savedPlan);
+}
+
+})(); // end IIFE
+</script>
+</body>
+</html>
