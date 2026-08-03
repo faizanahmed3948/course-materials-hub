@@ -2,7 +2,7 @@
 
 A free Progressive Web App giving Computer Engineering students at the University of Sharjah centralized access to course materials, hosted via Google Drive.
 
-**Live app:** https://tutorpage.netlify.app/
+**Live app:** (https://linksforall.netlify.app/)
 
 ## Features
 - **Course Drive** — 44 courses across categories (Core, Advanced, Lab, Math, General), with search and filtering
